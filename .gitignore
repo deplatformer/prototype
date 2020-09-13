@@ -1,4 +1,5 @@
 venv/
 __pycache__/
+deplatformr/__pycache__/
 server-notes.txt
 .DS_Store

@@ -1,0 +1,19 @@
+body {
+  background-color: #CCC;
+  color: #000;
+  font-family: "Kumbh Sans", sans-serif;
+}
+
+body img{
+  padding: 40px;
+}
+
+.container-fluid{
+  text-align: center;
+}
+
+
+
+.section {
+  padding-top: 100px;
+}
