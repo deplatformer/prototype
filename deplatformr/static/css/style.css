@@ -4,16 +4,17 @@ body {
   font-family: "Kumbh Sans", sans-serif;
 }
 
-body img{
-  padding: 40px;
+#login-header{
+    text-align: center;
 }
 
-.container-fluid{
-  text-align: center;
-}
+/* from flask_user - still needed? */
+hr { border-color: #cccccc; margin: 0; }
+.no-margins { margin: 0px; }
+.with-margins { margin: 10px; }
+.col-centered { float: none; margin: 0 auto; }
 
-
-
-.section {
-  padding-top: 100px;
+.col-xs-6 {
+    width: 50%;
+    padding: 0 15px;
 }
