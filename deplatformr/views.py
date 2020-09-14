@@ -5,7 +5,7 @@ from deplatformr import app
 
 @app.route('/')
 @login_required
-def home_page():
+def homepage():
     return render_template("index.html")
 
 

@@ -6,9 +6,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Deplatformr - Prototype</title>
 
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='fontawesome/css/all.min.css') }}">
 <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
 
 <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -21,37 +22,102 @@
 {# *** Allow sub-templates to insert extra html to the head section *** #}
 {% block extra_css %}{% endblock %}
 </head>
-
 <body>
-
-<a href="/"><img src="{{ url_for('static', filename='assets/deplatformr-no-text.png') }}" class="img-fluid"/></a>
-
-{% if call_or_get(current_user.is_authenticated) %}
-    <a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a>
-    &nbsp; | &nbsp;
-    <a href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a>
-{% else %}
-    <a href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a>
-{% endif %}
-
-{% block flash_messages %}
-    {%- with messages = get_flashed_messages(with_categories=true) -%}
-        {% if messages %}
-            {% for category, message in messages %}
-                {% if category=='error' %}
-                    {% set category='danger' %}
+<nav class="navbar navbar-expand-md fixed-top" id="mainNav"><a href="{{ url_for('homepage') }}">Deplatformr
+</nav>
+<div id="wrapper">
+    <div id="sidebar-wrapper">
+        <aside id="sidebar">
+            <ul id="sidemenu" class="sidebar-nav">
+                {% if call_or_get(current_user.is_authenticated) %}
+                <li>
+                    <a href="{{ url_for('user.edit_user_profile') }}">
+                    <span class="sidebar-icon"><i class="fa fa-user"></i></span>
+                    <span class="sidebar-title">{{ current_user.username or current_user.email }}</span>
+                    </a>
+                </li>
                 {% endif %}
-                <div class="alert alert-{{category}}">{{ message|safe }}</div>
-            {% endfor %}
-        {% endif %}
-    {%- endwith %}
-{% endblock %}
+                <li>
+                    <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu-2">
+                        <div class="float-left"><img src="{{ url_for('static', filename='assets/filecoin-logo.svg') }}" id="filecoin-logo"/></div>
+                        <span class="sidebar-title">Filecoin</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul id="submenu-2" class="panel-collapse collapse panel-switch" role="menu">
+                        <li><a class="submenu" href="#"><i class="fa fa-caret-right"></i>Files</a></li>
+                        <li><a class="submenu" href="#"><i class="fa fa-caret-right"></i>Wallets</a></li>
+                        <li><a class="submenu" href="#"><i class="fa fa-caret-right"></i>Deals</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu-3">
+                        <span class="sidebar-icon"><i class="fab fa-facebook"></i></span>
+                        <span class="sidebar-title">Facebook</span>
+                        <b class="caret"></b>
+                    </a>
+                    <ul id="submenu-3" class="panel-collapse collapse panel-switch" role="menu">
+                        <li><a a class="submenu" href="#"><i class="fa fa-caret-right"></i>Link 1</a></li>
+                        <li><a a class="submenu" href="#"><i class="fa fa-caret-right"></i>Link 2</a></li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="fab fa-instagram"></i></span>
+                        <span class="sidebar-title">Instagram</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="fab fa-apple"></i></span>
+                        <span class="sidebar-title">iCloud Photos</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="#">
+                        <span class="sidebar-icon"><i class="fab fa-google"></i></span>
+                        <span class="sidebar-title">Google Photos</span>
+                    </a>
+                </li>
 
-{% block main %}
 
-    {% block content %}{% endblock %}
+                {% if call_or_get(current_user.is_authenticated) %}
+                <li>
+                    <a href="{{ url_for('user.logout') }}">
+                    <span class="sidebar-icon"><i class="fa fa-power-off"></i></span>
+                    <span class="sidebar-title">{%trans%}Sign out{%endtrans%}</span>
+                    </a>
+                <li>
+                {% endif %}
+            </ul>
+        </aside>            
+    </div>
+    <main id="page-content-wrapper" role="main">
+        <div class="container-fluid" style="margin: 15px;">
+    
+        {% block flash_messages %}
+            {%- with messages = get_flashed_messages(with_categories=true) -%}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category=='error' %}
+                            {% set category='danger' %}
+                        {% endif %}
+                        {% if message != 'You have signed in successfully.' %}
+                        <div class="alert alert-{{category}}">{{ message|safe }}</div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {%- endwith %}
+        {% endblock %}
 
-{% endblock %}
+        {% block main %}
+
+            {% block content %}{% endblock %}
+
+        {% endblock %}
+    </main>
+
+</div> 
+
 
 <script src="{{ url_for('static', filename='js/jquery-3.5.0.min.js') }}"></script>
 <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>

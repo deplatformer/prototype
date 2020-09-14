@@ -1,10 +1,12 @@
 body {
-  background-color: #CCC;
+  background-color: #FFF;
   color: #000;
   font-family: "Kumbh Sans", sans-serif;
 }
 
-#
+.help-block {
+    color: red;
+}
 
 /* from flask_user - still needed? */
 hr { border-color: #cccccc; margin: 0; }
@@ -15,4 +17,157 @@ hr { border-color: #cccccc; margin: 0; }
 .col-xs-6 {
     width: 50%;
     padding: 0 15px;
+}
+
+.form-group a{
+    color: #05386B;
+}
+
+.btn-primary {
+    background-color: #05386B !important;
+    border: 1px solid #05386B;
+    color: #FFF;
+}
+
+#mainNav {
+    height: 75px;
+    background-color: #000;
+    color: #FFF;
+}
+
+#mainNav a {
+    color: #FFF;
+}
+
+#wrapper {
+    padding-left: 0;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+    overflow: hidden;
+}
+
+@media (min-width: 992px) {
+    #wrapper {
+        padding-left: 225px;
+    }
+}
+
+@media (min-width: 992px) {
+    #wrapper #sidebar-wrapper {
+        width: 225px;
+    }
+}
+
+#page-content-wrapper{
+    margin-left: 15px;
+    padding-top: 100px;
+}
+
+#sidebar-wrapper {
+    z-index: 1000;
+    position: fixed;
+    left: 225px;
+    width: 0;
+    height: 100%;
+    margin-left: -225px;
+    margin-top: 76px;
+    overflow-y: auto;
+    overflow: hidden;
+    background-color: #EDF5E1;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    -o-transition: all .5s ease;
+    transition: all .5s ease;
+}
+
+#sidebar-wrapper .sidebar-nav {
+    position: absolute;
+    top: 0;
+    width: 225px;
+    font-size: 14px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+#sidebar-wrapper .sidebar-nav li {
+    text-indent: 0;
+    line-height: 45px;
+}
+
+#sidebar-wrapper .sidebar-nav li a {
+    display: block;
+    text-decoration: none;
+    background: #379683;
+    color: #000 !important;
+    border-bottom: 1px solid #EDF5E1;
+
+}
+
+a.submenu {
+    background: #EDF5E1 !important;
+    color: #000 !important;
+    border-bottom: 1px solid #000;
+    padding-left: 10px;
+}
+
+#sidebar-wrapper .sidebar-nav li a .sidebar-icon {
+    width: 45px;
+    height: 45px;
+    font-size: 14px;
+    padding: 0 2px;
+    display: inline-block;
+    text-indent: 7px;
+    color: #000;
+    float: left;
+}
+
+#sidebar-wrapper .sidebar-nav li a .caret {
+  position: absolute;
+  right: 23px;
+  top: auto;
+  margin-top: 20px;
+}
+
+#sidebar-wrapper .sidebar-nav li ul.panel-collapse {
+    list-style: none;
+    -moz-padding-start: 0;
+    -webkit-padding-start: 0;
+    -khtml-padding-start: 0;
+    -o-padding-start: 0;
+    padding-start: 0;
+    padding: 0;
+}
+
+#sidebar-wrapper .sidebar-nav li ul.panel-collapse li i {
+    margin-right: 10px;
+}
+
+#sidebar-wrapper .sidebar-nav li ul.panel-collapse li {
+    text-indent: 15px;
+}
+
+@media (max-width: 992px) {
+    #wrapper #sidebar-wrapper {
+        width: 45px;
+    }
+    #wrapper #page-content-wrapper{
+        margin-left: 60px;
+    }
+    #wrapper #sidebar-wrapper #sidebar #sidemenu li ul {
+        position: fixed;
+        left: 45px;
+        margin-top: -45px;
+        z-index: 1000;
+        width: 200px;
+        height: 0;
+    }
+}
+
+#filecoin-logo{
+    width: 25px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
