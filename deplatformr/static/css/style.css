@@ -4,9 +4,7 @@ body {
   font-family: "Kumbh Sans", sans-serif;
 }
 
-#login-header{
-    text-align: center;
-}
+#
 
 /* from flask_user - still needed? */
 hr { border-color: #cccccc; margin: 0; }

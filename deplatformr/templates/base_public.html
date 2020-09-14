@@ -23,14 +23,11 @@
   </head>
 
   <body>
-    {% block body %}
     <div id="header-div" class="clearfix with-margins text-center" style="padding: 20px 0 100px 0;">
         <img src="{{ url_for('static', filename='assets/deplatformr-border.png') }}" class="img-fluid" />
     </div>
 
-
     <div id="main-div" class="with-margins">
-
 
     <div class="container">
     <div class="row">
@@ -57,23 +54,18 @@
 
     {% endblock %}
     </div>
+    <br/>    
 
-    <br/>
-    <hr class="no-margins"/>
     <div id="footer-div" class="clearfix with-margins">
         <div class="float-left"></div>
         <div class="float-right"></div>
     </div>
-    {% endblock %}
-
-
 
     <script src="{{ url_for('static', filename='js/jquery-3.5.0.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
 
     {# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
     {% block extra_js %}{% endblock %}
-
 
   </body>
 </html>

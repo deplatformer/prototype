@@ -1,86 +1,62 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Deplatformr - Prototype</title>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Deplatformr - Prototype</title>
 
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-    <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
-    <link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+<link href="https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@400;700&display=swap" rel="stylesheet">
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
-      <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
-    <![endif]-->
+<!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE 9]>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.js"></script>
+<![endif]-->
 
-    {# *** Allow sub-templates to insert extra html to the head section *** #}
-    {% block extra_css %}{% endblock %}
-  </head>
+{# *** Allow sub-templates to insert extra html to the head section *** #}
+{% block extra_css %}{% endblock %}
+</head>
 
-  <body>
-    {% block body %}
-    <div id="header-div" class="clearfix with-margins">
-        <div class="float-left"><a href="/"><img src="{{ url_for('static', filename='assets/deplatformr-border.png') }}" class="img-fluid" style="height: 100px; width: auto;" /></a></div>
-        <div class="float-right">
-            {% if call_or_get(current_user.is_authenticated) %}
-                <a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a>
-                &nbsp; | &nbsp;
-                <a href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a>
-            {% else %}
-                <a href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a>
-            {% endif %}
-        </div>
-    </div>
-    {% block menu %}
-    <div id="menu-div" class="with-margins">
-        <a href="/">{%trans%}Home page{%endtrans%}</a>
-    </div>
-    {% endblock %}
-    <hr class="no-margins"/>
+<body>
 
-    <div id="main-div" class="with-margins">
-    {# One-time system messages called Flash messages #}
-    {% block flash_messages %}
-        {%- with messages = get_flashed_messages(with_categories=true) -%}
-            {% if messages %}
-                {% for category, message in messages %}
-                    {% if category=='error' %}
-                        {% set category='danger' %}
-                    {% endif %}
-                    <div class="alert alert-{{category}}">{{ message|safe }}</div>
-                {% endfor %}
-            {% endif %}
-        {%- endwith %}
-    {% endblock %}
+<a href="/"><img src="{{ url_for('static', filename='assets/deplatformr-no-text.png') }}" class="img-fluid"/></a>
 
-    {% block main %}
-        <div class="container-fluid">
-        {% block content %}{% endblock %}
-        </div>
-    {% endblock %}
-    </div>
+{% if call_or_get(current_user.is_authenticated) %}
+    <a href="{{ url_for('user.edit_user_profile') }}">{{ current_user.username or current_user.email }}</a>
+    &nbsp; | &nbsp;
+    <a href="{{ url_for('user.logout') }}">{%trans%}Sign out{%endtrans%}</a>
+{% else %}
+    <a href="{{ url_for('user.login') }}">{%trans%}Sign in{%endtrans%}</a>
+{% endif %}
 
-    <br/>
-    <hr class="no-margins"/>
-    <div id="footer-div" class="clearfix with-margins">
-        <div class="float-left"></div>
-        <div class="float-right"></div>
-    </div>
-    {% endblock %}
+{% block flash_messages %}
+    {%- with messages = get_flashed_messages(with_categories=true) -%}
+        {% if messages %}
+            {% for category, message in messages %}
+                {% if category=='error' %}
+                    {% set category='danger' %}
+                {% endif %}
+                <div class="alert alert-{{category}}">{{ message|safe }}</div>
+            {% endfor %}
+        {% endif %}
+    {%- endwith %}
+{% endblock %}
 
+{% block main %}
 
+    {% block content %}{% endblock %}
 
-    <script src="{{ url_for('static', filename='js/jquery-3.5.0.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{% endblock %}
 
-    {# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
-    {% block extra_js %}{% endblock %}
+<script src="{{ url_for('static', filename='js/jquery-3.5.0.min.js') }}"></script>
+<script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
+{# *** Allow sub-templates to insert extra html to the bottom of the body *** #}
+{% block extra_js %}{% endblock %}
 
-
-  </body>
+</body>
 </html>
