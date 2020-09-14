@@ -23,20 +23,32 @@
 {% block extra_css %}{% endblock %}
 </head>
 <body>
-<nav class="navbar navbar-expand-md fixed-top" id="mainNav"><a href="{{ url_for('homepage') }}">Deplatformr
-</nav>
+
+<div class="navbar navbar-expand fixed-top" id="mainNav">
+    <div class="navbar-brand">
+    <a href="{{ url_for('homepage') }}"><img src="{{ url_for('static', filename='assets/deplatformr-white.png') }}" class="img-fluid" /></a>
+    </div>
+    <ul class="navbar-nav ml-auto">
+        {% if call_or_get(current_user.is_authenticated) %}
+        <li class="nav-item"><a href="{{ url_for('user.edit_user_profile') }}">
+        <span class="topmenu-icon"><i class="fa fa-user"></i></span>
+        <span class="topmenu-title">{{ current_user.username or current_user.email }}</span></a>
+        </li>
+        <li class="nav-item"><a href="{{ url_for('user.logout') }}">
+        <span class="topmenu-icon"><i class="fa fa-power-off"></i></span>
+        <span class="topmenu-title">Logout</span></a>
+        </li>
+        {% endif %}
+    </ul>
+    </div>
+</div>
+
+
+
 <div id="wrapper">
     <div id="sidebar-wrapper">
         <aside id="sidebar">
-            <ul id="sidemenu" class="sidebar-nav">
-                {% if call_or_get(current_user.is_authenticated) %}
-                <li>
-                    <a href="{{ url_for('user.edit_user_profile') }}">
-                    <span class="sidebar-icon"><i class="fa fa-user"></i></span>
-                    <span class="sidebar-title">{{ current_user.username or current_user.email }}</span>
-                    </a>
-                </li>
-                {% endif %}
+            <ul id="sidemenu" class="sidebar-nav" style="margin-top: 45px;">
                 <li>
                     <a class="accordion-toggle collapsed toggle-switch" data-toggle="collapse" href="#submenu-2">
                         <div class="float-left"><img src="{{ url_for('static', filename='assets/filecoin-logo.svg') }}" id="filecoin-logo"/></div>
@@ -78,16 +90,6 @@
                         <span class="sidebar-title">Google Photos</span>
                     </a>
                 </li>
-
-
-                {% if call_or_get(current_user.is_authenticated) %}
-                <li>
-                    <a href="{{ url_for('user.logout') }}">
-                    <span class="sidebar-icon"><i class="fa fa-power-off"></i></span>
-                    <span class="sidebar-title">{%trans%}Sign out{%endtrans%}</span>
-                    </a>
-                <li>
-                {% endif %}
             </ul>
         </aside>            
     </div>

@@ -19,7 +19,7 @@ hr { border-color: #cccccc; margin: 0; }
     padding: 0 15px;
 }
 
-.form-group a{
+a {
     color: #05386B;
 }
 
@@ -37,6 +37,23 @@ hr { border-color: #cccccc; margin: 0; }
 
 #mainNav a {
     color: #FFF;
+}
+
+#mainNav a:hover{
+    text-decoration: none;
+    color: #379683;
+}
+
+.navbar-brand {
+    margin-left: 30px;
+}
+
+.topmenu-icon {
+    margin: 0 5px 0 20px;
+}
+
+.topmenu-title {
+    visibility: visible;
 }
 
 #wrapper {
@@ -61,8 +78,8 @@ hr { border-color: #cccccc; margin: 0; }
 }
 
 #page-content-wrapper{
-    margin-left: 15px;
-    padding-top: 100px;
+    margin: 0 15px;
+    padding-top: 110px;
 }
 
 #sidebar-wrapper {
@@ -72,10 +89,10 @@ hr { border-color: #cccccc; margin: 0; }
     width: 0;
     height: 100%;
     margin-left: -225px;
-    margin-top: 76px;
+    margin-top: 75px;
     overflow-y: auto;
     overflow: hidden;
-    background-color: #EDF5E1;
+    background-color: #379683;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -o-transition: all .5s ease;
@@ -102,14 +119,12 @@ hr { border-color: #cccccc; margin: 0; }
     text-decoration: none;
     background: #379683;
     color: #000 !important;
-    border-bottom: 1px solid #EDF5E1;
 
 }
 
 a.submenu {
     background: #EDF5E1 !important;
     color: #000 !important;
-    border-bottom: 1px solid #000;
     padding-left: 10px;
 }
 
@@ -163,6 +178,14 @@ a.submenu {
         z-index: 1000;
         width: 200px;
         height: 0;
+    }
+    .topmenu-title {
+        visibility: hidden;
+        display: inline-block;
+        width:0px;
+    }
+    .topmenu-icon {
+        margin: 0 10px 0 0;
     }
 }
 
