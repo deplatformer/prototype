@@ -6,7 +6,7 @@ from deplatformr import app
 @app.route('/')
 @login_required
 def homepage():
-    return render_template("index.html")
+    return render_template("homepage.html")
 
 
 @app.route('/filecoin-files')
