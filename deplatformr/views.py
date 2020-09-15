@@ -9,18 +9,61 @@ def homepage():
     return render_template("index.html")
 
 
-@app.route('/members')
-@login_required    # User must be authenticated
-def member_page():
-    # String-based templates
-    return render_template_string("""
-        {% extends "base.html" %}
-        {% block content %}
-            <h2>Members page</h2>
-            <p><a href={{ url_for('user.register') }}>Register</a></p>
-            <p><a href={{ url_for('user.login') }}>Sign in</a></p>
-            <p><a href={{ url_for('home_page') }}>Home page</a> (accessible to anyone)</p>
-            <p><a href={{ url_for('member_page') }}>Member page</a> (login required)</p>
-            <p><a href={{ url_for('user.logout') }}>Sign out</a></p>
-        {% endblock %}
-        """)
+@app.route('/filecoin-files')
+@login_required
+def filecoin_files():
+    return render_template("filecoin/filecoin-files.html")
+
+
+@app.route('/filecoin-wallets')
+@login_required
+def filecoin_wallets():
+    return render_template("filecoin/filecoin-wallets.html")
+
+
+@app.route('/filecoin-deals')
+@login_required
+def filecoin_deals():
+    return render_template("filecoin/filecoin-deals.html")
+
+
+@app.route('/facebook-deplatform')
+@login_required
+def facebook_deplatform():
+    return render_template("facebook/facebook-deplatform.html")
+
+
+@app.route('/facebook-upload')
+@login_required
+def facebook_upload():
+    return render_template("facebook/facebook-upload.html")
+
+
+@app.route('/facebook-view')
+@login_required
+def facebook_view():
+    return render_template("facebook/facebook-view.html")
+
+
+@app.route('/facebook-manage')
+@login_required
+def facebook_manage():
+    return render_template("facebook/facebook-manage.html")
+
+
+@app.route('/instagram')
+@login_required
+def instagram():
+    return render_template("instagram/instagram.html")
+
+
+@app.route('/icloud')
+@login_required
+def icloud():
+    return render_template("icloud/icloud.html")
+
+
+@app.route('/google')
+@login_required
+def google():
+    return render_template("google/google.html")

@@ -2,6 +2,7 @@ body {
   background-color: #FFF;
   color: #000;
   font-family: "Kumbh Sans", sans-serif;
+  font-size: 120%;
 }
 
 .help-block {
@@ -41,7 +42,7 @@ a {
 
 #mainNav a:hover{
     text-decoration: none;
-    color: #379683;
+    color: #8EE4AF;
 }
 
 .navbar-brand {
@@ -54,6 +55,7 @@ a {
 
 .topmenu-title {
     visibility: visible;
+    font-size: 90%;
 }
 
 #wrapper {
@@ -78,8 +80,8 @@ a {
 }
 
 #page-content-wrapper{
-    margin: 0 15px;
-    padding-top: 110px;
+    margin: 0 30px 0 0;
+    padding-top: 75px;
 }
 
 #sidebar-wrapper {
@@ -92,7 +94,7 @@ a {
     margin-top: 75px;
     overflow-y: auto;
     overflow: hidden;
-    background-color: #379683;
+    background-color: #8EE4AF;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -o-transition: all .5s ease;
@@ -103,7 +105,6 @@ a {
     position: absolute;
     top: 0;
     width: 225px;
-    font-size: 14px;
     margin: 0;
     padding: 0;
     list-style: none;
@@ -117,7 +118,7 @@ a {
 #sidebar-wrapper .sidebar-nav li a {
     display: block;
     text-decoration: none;
-    background: #379683;
+    background: #8EE4AF;
     color: #000 !important;
 
 }
@@ -125,7 +126,6 @@ a {
 a.submenu {
     background: #EDF5E1 !important;
     color: #000 !important;
-    padding-left: 10px;
 }
 
 #sidebar-wrapper .sidebar-nav li a .sidebar-icon {
@@ -190,7 +190,37 @@ a.submenu {
 }
 
 #filecoin-logo{
-    width: 25px;
+    width: 30px;
     margin-left: 10px;
-    margin-right: 10px;
+    margin-right: 5px;
+}
+
+.banner {
+    color: #FFF;
+    background-color: #379683;
+    padding: 50px;
+    text-align: center;
+    border-radius: .5rem;
+}
+
+.banner h1{
+    font-weight: bold;
+}
+
+.header{
+    background-color: #379683;
+    color: #FFF;
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: .5rem;
+}
+
+.breadcrumbs
+{
+    font-size: 100%;
+    background-color: #e9ecef;
+    color: #999;
+    margin-bottom: 20px;
+    padding: 10px;
+    border-radius: .5rem;
 }
