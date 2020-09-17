@@ -99,7 +99,7 @@ a {
     overflow-y: auto;
     overflow: hidden;
     background-color: #FFF;
-    border-right: 1px solid #379683;
+    border-right: 1px solid #e9ecef;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -o-transition: all .5s ease;
@@ -124,13 +124,17 @@ a {
     display: block;
     text-decoration: none;
     background: #FFF;
-    color: #000 !important;
+    color: #000;
 
+}
+
+#sidebar-wrapper .sidebar-nav li a:hover {
+    color: #379683;
 }
 
 a.submenu {
     background: #FFF;
-    color: #000 !important;
+    color: #000;
 }
 
 #sidebar-wrapper .sidebar-nav li a .sidebar-icon {

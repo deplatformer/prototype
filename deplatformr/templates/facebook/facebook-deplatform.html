@@ -75,8 +75,10 @@
 <h2>Next steps</h2>
 Go to  <span style="font-weight: bold;"><a href="{{ url_for('facebook_upload') }}">Facebook > Upload content</a></span> to move this <span style="font-weight: bold;">.zip</span> file to Deplatformr and have it re-process and backup your Facebook content to decentralized Filecoin storage.
 
-<hr style="margin-bottom: 20px;"/>
+<hr style="margin: 20px 0;"/>
 <span class="highlight"><span style="font-weight: bold;">PLEASE NOTE:</span></span>
-<p style="margin-top: 10px;"><em>This is a prototype version of Deplatformr. We are going to assume that you've followed the steps above and that this: <a href="{{ url_for('static', filename='sample_data/facebook-deplatformr.zip') }}"><span style="font-weight: bold;">facebook-deplatformr.zip</span></a> file is the one made available to you by Facebook. Please download it and use it to continue testing Deplatformr, starting with the <span style="font-weight: bold;"><a href="{{ url_for('facebook_upload') }}">Facebook > Upload content</a></span> step.</em></p>
+<p style="margin-top: 10px;"><em>This is a prototype version of Deplatformr. We are going to assume that you've followed the steps above and that this file: 
+    <p style="margin-top: 10px;"><i class="fa fa-caret-right" style="margin-right: 10px;"></i><a href="{{ url_for('static', filename='sample_data/facebook-deplatformr.zip') }}">facebook-deplatformr.zip</a></p>
+<p style="margin-top: 10px;">is the one made available to you by Facebook. Please download it and use it to continue testing Deplatformr, starting with the <span style="font-weight: bold;"><a href="{{ url_for('facebook_upload') }}">Facebook > Upload content</a></span> step.</em></p>
 
 {% endblock %}
