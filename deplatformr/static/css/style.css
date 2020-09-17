@@ -242,3 +242,14 @@ a.submenu {
     padding: 1px 10px;
     border-radius: .5rem;
 }
+
+#facebook-upload{
+    max-width: 800px;
+}
+
+#upload-button{
+    font-size: 100%;
+    color: #FFF;
+    background-color: #379683;
+    border: 1px solid #999;
+}

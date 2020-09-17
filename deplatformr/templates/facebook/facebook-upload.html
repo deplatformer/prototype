@@ -10,13 +10,13 @@
 
   <form action = "{{ url_for('facebook_upload') }}" method = "POST" enctype = "multipart/form-data">
 
-  <div class="input-group mb-3">
+  <div class="input-group mb-3" id="facebook-upload">
     <div class="custom-file">
       <input type="file" class="custom-file-input" name="uploadfile" id="uploadfile" accept=".zip">
       <label class="custom-file-label" for="uploadfile" aria-describedby="inputGroupFileAddon02">Choose zip file</label>
     </div>
     <div class="input-group-append">
-      <input type="submit" class="input-group-text" id="inputGroupFileAddon02" value="Upload" />
+      <input type="submit" class="input-group-text" id="upload-button" value="Upload" />
     </div>
   </div>
 
@@ -29,5 +29,20 @@
 <!-- end row -->
 </div>
 
+{% endblock %}
 
+{% block extra_js %}
+<script>
+// Add the name of the selected file to the form input
+$(".custom-file-input").on("change", function() {
+  var files = $("#uploadfile")[0].files;
+  if (files.length > 1) {
+    $(this).siblings(".custom-file-label").addClass("selected").html("Multiple files selected");
+  }
+  else {
+    var fileName = $(this).val().split("\\").pop();
+    $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+  }
+});
+</script>
 {% endblock %}

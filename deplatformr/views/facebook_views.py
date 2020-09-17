@@ -16,9 +16,6 @@ def facebook_deplatform():
 @login_required
 def facebook_upload():
 
-    upload_form = FacebookUploadForm()
-    form = FacebookUploadForm(request.form)
-
     # Uploading a new file
     if request.method == "POST":
 
@@ -30,6 +27,8 @@ def facebook_upload():
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
 
+        #TODO: Create a subdirectory per username
+
         # Save the uploaded file
         file_name = secure_filename(upload.filename)
         try:
@@ -39,8 +38,10 @@ def facebook_upload():
             upload_data = ""  # query to retrieve all current and historical upload stats
             flash("Please choose a .zip file to upload to Deplatformr")
             return render_template(
-                "facebook/facebook-upload.html", upload_form=upload_form, upload_stats=upload_stats
+                "facebook/facebook-upload.html", upload_stats=upload_stats
             )
+
+        # TODO: Parse Facebook JSON and save to SQLite
 
         # TODO: ENCRYPT FILES
 
@@ -48,7 +49,7 @@ def facebook_upload():
 
     upload_stats = ""  # query to retrieve all current and historical upload stats
 
-    return render_template("facebook/facebook-upload.html", upload_form=upload_form, upload_stats=upload_stats)
+    return render_template("facebook/facebook-upload.html", upload_stats=upload_stats)
 
 
 @app.route('/facebook-view')
