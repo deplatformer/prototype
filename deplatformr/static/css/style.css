@@ -254,3 +254,7 @@ a.submenu {
     background-color: #379683;
     border: 1px solid #999;
 }
+
+#upload-button:hover {
+    background-color: #007bff;
+}
