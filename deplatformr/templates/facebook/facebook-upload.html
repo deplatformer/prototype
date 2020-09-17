@@ -4,8 +4,30 @@
 
 <div class="breadcrumbs">Facebook / Upload content</div>
 
-<div class="banner">
-<h1>coming soon</h1>
+<div class="row" style="margin-top: 50px;">
+
+<div class="col">
+
+  <form action = "{{ url_for('facebook_upload') }}" method = "POST" enctype = "multipart/form-data">
+
+  <div class="input-group mb-3">
+    <div class="custom-file">
+      <input type="file" class="custom-file-input" name="uploadfile" id="uploadfile" accept=".zip">
+      <label class="custom-file-label" for="uploadfile" aria-describedby="inputGroupFileAddon02">Choose zip file</label>
+    </div>
+    <div class="input-group-append">
+      <input type="submit" class="input-group-text" id="inputGroupFileAddon02" value="Upload" />
+    </div>
+  </div>
+
+  </form>
+
+
+<!-- end column -->
 </div>
+
+<!-- end row -->
+</div>
+
 
 {% endblock %}

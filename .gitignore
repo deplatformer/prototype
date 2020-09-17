@@ -7,4 +7,5 @@ deplatformr/views/__pycache__/
 deplatformr/models/__pycache__/
 deplatformr/helpers/__pycache__/
 deplatformr/deplatformr.sqlite
+_user_data/
 
