@@ -21,13 +21,12 @@ hr { border-color: #cccccc; margin: 0; }
 }
 
 a {
-    color: #05386B;
+    color: #379683;
 }
 
 .btn-primary {
-    background-color: #05386B !important;
-    border: 1px solid #05386B;
     color: #FFF;
+    background-color: #379683;
 }
 
 #mainNav {
@@ -99,7 +98,8 @@ a {
     margin-top: 75px;
     overflow-y: auto;
     overflow: hidden;
-    background-color: #8EE4AF;
+    background-color: #FFF;
+    border-right: 1px solid #8EE4AF;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -o-transition: all .5s ease;
@@ -123,13 +123,13 @@ a {
 #sidebar-wrapper .sidebar-nav li a {
     display: block;
     text-decoration: none;
-    background: #8EE4AF;
+    background: #FFF;
     color: #000 !important;
 
 }
 
 a.submenu {
-    background: #EDF5E1 !important;
+    background: #FFF;
     color: #000 !important;
 }
 
@@ -213,9 +213,10 @@ a.submenu {
 }
 
 .header{
-    background-color: #379683;
-    color: #FFF;
+    background-color: #FFF;
+    color: #000;
     padding: 15px;
+    border: 2px solid #8EE4AF;
     margin-bottom: 20px;
     border-radius: .5rem;
 }
