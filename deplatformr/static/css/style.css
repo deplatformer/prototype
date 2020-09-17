@@ -41,7 +41,7 @@ a {
 
 #mainNav a:hover{
     text-decoration: none;
-    color: #8EE4AF;
+    color: #379683;
 }
 
 .navbar-brand {
@@ -99,7 +99,7 @@ a {
     overflow-y: auto;
     overflow: hidden;
     background-color: #FFF;
-    border-right: 1px solid #8EE4AF;
+    border-right: 1px solid #379683;
     -webkit-transition: all .5s ease;
     -moz-transition: all .5s ease;
     -o-transition: all .5s ease;
@@ -216,7 +216,7 @@ a.submenu {
     background-color: #FFF;
     color: #000;
     padding: 15px;
-    border: 2px solid #8EE4AF;
+    border: 2px solid #379683;
     margin-bottom: 20px;
     border-radius: .5rem;
 }
