@@ -39,9 +39,8 @@ def facebook_upload():
 
         # Save the uploaded file
         # TODO: move to background worker task (e.g. Celery)
-        file_name = secure_filename(upload.filename)
-        # TODO: move to async output
-        print("Saving uploaded file")
+        file_name = secure_filename(upload.filename)     
+        print("Saving uploaded file") # TODO: move to async user output
         try:
             upload.save(os.path.join(facebook_dir, file_name))
         except:
@@ -54,12 +53,20 @@ def facebook_upload():
 
         # Unzip the uploaded file
         # TODO: move to background worker task (e.g. Celery)
-        print("Unzipping file")
-        # TODO: move to async output
-        unzip_dir = unzip(os.path.join(facebook_dir, file_name))
+        print("Extracting zip file") # TODO: move to async user output
+        try:
+            unzip_dir = unzip(os.path.join(facebook_dir, file_name))
+        except:
+            upload_stats = ""  # query to retrieve all current and historical upload stats
+            flash("Unable to extract zip file.")
+            return render_template(
+                "facebook/facebook-upload.html", upload_stats=upload_stats
+            )
 
         # Parse Facebook JSON and save to SQLite
         # TODO: move to background worker task (e.g. Celery)
+        print("Parsing Facebook data") # TODO: move to async user output
+
 
         # TODO: ENCRYPT FILES
 
