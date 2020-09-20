@@ -3,7 +3,7 @@ from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
 from flask_user import login_required, current_user
 from deplatformr import app
-from deplatformr.forms.facebook_forms import FacebookUploadForm
+from deplatformr.helpers.helpers import unzip
 
 
 @app.route('/facebook-deplatform')
@@ -32,10 +32,18 @@ def facebook_upload():
         if not os.path.exists(user_dir):
             os.makedirs(user_dir)
 
+        # Create a Facebook subdirectory.
+        facebook_dir = os.path.join(user_dir, "facebook")
+        if not os.path.exists(facebook_dir):
+            os.makedirs(facebook_dir)
+
         # Save the uploaded file
+        # TODO: move to background worker task (e.g. Celery)
         file_name = secure_filename(upload.filename)
+        # TODO: move to async output
+        print("Saving uploaded file")
         try:
-            upload.save(os.path.join(user_dir, file_name))
+            upload.save(os.path.join(facebook_dir, file_name))
         except:
             # Return if the user did not provide a file to upload
             upload_stats = ""  # query to retrieve all current and historical upload stats
@@ -44,7 +52,14 @@ def facebook_upload():
                 "facebook/facebook-upload.html", upload_stats=upload_stats
             )
 
-        # TODO: Parse Facebook JSON and save to SQLite
+        # Unzip the uploaded file
+        # TODO: move to background worker task (e.g. Celery)
+        print("Unzipping file")
+        # TODO: move to async output
+        unzip_dir = unzip(os.path.join(facebook_dir, file_name))
+
+        # Parse Facebook JSON and save to SQLite
+        # TODO: move to background worker task (e.g. Celery)
 
         # TODO: ENCRYPT FILES
 
