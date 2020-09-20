@@ -1,7 +1,7 @@
 import os
 from flask import Flask, render_template, request
 from werkzeug.utils import secure_filename
-from flask_user import login_required
+from flask_user import login_required, current_user
 from deplatformr import app
 from deplatformr.forms.facebook_forms import FacebookUploadForm
 
@@ -27,15 +27,18 @@ def facebook_upload():
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
 
-        #TODO: Create a subdirectory per username
+        # Create a subdirectory per username. Usernames are unique.
+        user_dir = os.path.join(upload_path, current_user.username)
+        if not os.path.exists(user_dir):
+            os.makedirs(user_dir)
 
         # Save the uploaded file
         file_name = secure_filename(upload.filename)
         try:
-            upload.save(os.path.join(upload_path, file_name))
+            upload.save(os.path.join(user_dir, file_name))
         except:
             # Return if the user did not provide a file to upload
-            upload_data = ""  # query to retrieve all current and historical upload stats
+            upload_stats = ""  # query to retrieve all current and historical upload stats
             flash("Please choose a .zip file to upload to Deplatformr")
             return render_template(
                 "facebook/facebook-upload.html", upload_stats=upload_stats
