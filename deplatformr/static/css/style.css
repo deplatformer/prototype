@@ -85,7 +85,7 @@ a {
 }
 
 #page-content-wrapper a{
-    color: #007bff !important;
+    color: #379683;
 }
 
 #sidebar-wrapper {
@@ -202,6 +202,11 @@ a.submenu {
     width: 30px;
     margin-left: 10px;
     margin-right: 5px;
+}
+
+#filecoin-logo{
+    width: 28px;
+    margin-bottom: 5px;
 }
 
 .banner {
