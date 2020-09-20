@@ -1,9 +1,10 @@
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, flash
 from werkzeug.utils import secure_filename
 from flask_user import login_required, current_user
 from deplatformr import app
 from deplatformr.helpers.helpers import unzip
+from deplatformr.helpers.facebook_helpers import posts_to_db
 
 
 @app.route('/facebook-deplatform')
@@ -39,13 +40,14 @@ def facebook_upload():
 
         # Save the uploaded file
         # TODO: move to background worker task (e.g. Celery)
-        file_name = secure_filename(upload.filename)     
-        print("Saving uploaded file") # TODO: move to async user output
+        file_name = secure_filename(upload.filename)
+        print("Saving uploaded file")  # TODO: move to async user output
         try:
             upload.save(os.path.join(facebook_dir, file_name))
         except:
             # Return if the user did not provide a file to upload
             upload_stats = ""  # query to retrieve all current and historical upload stats
+            # TODO: Add flash output to facebook_upload template
             flash("Please choose a .zip file to upload to Deplatformr")
             return render_template(
                 "facebook/facebook-upload.html", upload_stats=upload_stats
@@ -53,7 +55,7 @@ def facebook_upload():
 
         # Unzip the uploaded file
         # TODO: move to background worker task (e.g. Celery)
-        print("Extracting zip file") # TODO: move to async user output
+        print("Extracting zip file")  # TODO: move to async user output
         try:
             unzip_dir = unzip(os.path.join(facebook_dir, file_name))
         except:
@@ -65,8 +67,20 @@ def facebook_upload():
 
         # Parse Facebook JSON and save to SQLite
         # TODO: move to background worker task (e.g. Celery)
-        print("Parsing Facebook data") # TODO: move to async user output
-
+        try:
+            print("Parsing Facebook content.") # TODO: move to async user output
+            print("Saving posts to database.") # TODO: move to async user output
+            total_posts, max_date, min_date, profile_updates, total_media = posts_to_db(
+                unzip_dir)
+            print(str(total_posts[0]) + " posts between " +
+                  min_date[0] + " and " + max_date[0] + " were saved.")
+            print("Including " + str(profile_updates) + " profile updates.")
+            print(str(total_media[0]) + " media files were linked.") # TODO: move to async user output
+        except Exception as e:
+            upload_stats = ""  # query to retrieve all current and historical upload stats
+            flash(e)
+            return render_template(
+                "facebook/facebook-upload.html", upload_stats=upload_stats)
 
         # TODO: ENCRYPT FILES
 
@@ -77,13 +91,13 @@ def facebook_upload():
     return render_template("facebook/facebook-upload.html", upload_stats=upload_stats)
 
 
-@app.route('/facebook-view')
-@login_required
+@ app.route('/facebook-view')
+@ login_required
 def facebook_view():
     return render_template("facebook/facebook-view.html")
 
 
-@app.route('/facebook-manage')
-@login_required
+@ app.route('/facebook-manage')
+@ login_required
 def facebook_manage():
     return render_template("facebook/facebook-manage.html")
