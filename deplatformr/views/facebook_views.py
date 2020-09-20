@@ -17,6 +17,9 @@ def facebook_deplatform():
 @login_required
 def facebook_upload():
 
+    # Assume upload didn't happen or failed until proven otherwise
+    upload_success = False
+
     # Uploading a new file
     if request.method == "POST":
 
@@ -46,11 +49,11 @@ def facebook_upload():
             upload.save(os.path.join(facebook_dir, file_name))
         except:
             # Return if the user did not provide a file to upload
-            upload_stats = ""  # query to retrieve all current and historical upload stats
             # TODO: Add flash output to facebook_upload template
-            flash("Please choose a .zip file to upload to Deplatformr", "alert-danger")
+            flash(
+                "Please make sure that you've selected a file and that it's in ZIP format.", "alert-danger")
             return render_template(
-                "facebook/facebook-upload.html", upload_stats=upload_stats
+                "facebook/facebook-upload.html", upload=upload_success, breadcrumb="Facebook / Upload content"
             )
 
         # Unzip the uploaded file
@@ -59,10 +62,9 @@ def facebook_upload():
         try:
             unzip_dir = unzip(os.path.join(facebook_dir, file_name))
         except:
-            upload_stats = ""  # query to retrieve all current and historical upload stats
             flash("Unable to extract zip file.", "alert-danger")
             return render_template(
-                "facebook/facebook-upload.html", upload_stats=upload_stats
+                "facebook/facebook-upload.html", upload=upload_success, breadcrumb="Facebook / Upload content"
             )
 
         # Parse Facebook JSON and save to SQLite
@@ -74,24 +76,21 @@ def facebook_upload():
             print("Saving posts to database.")
             total_posts, max_date, min_date, profile_updates, total_media = posts_to_db(
                 unzip_dir)
-            print(str(total_posts[0]) + " posts between " +
-                  min_date[0] + " and " + max_date[0] + " were saved.")
-            print("Including " + str(profile_updates) + " profile updates.")
-            # TODO: move to async user output
-            print(str(total_media[0]) + " media files were linked.")
+            # Output upload stats
+            flash("Saved " + str(total_posts[0]) + " posts between " + min_date[0] + " and " + max_date[0] + ". This includes " + str(
+                profile_updates) + " profile updates. " + str(total_media[0]) + " media files were linked.", "alert-success")
+            upload_success = True
         except Exception as e:
-            upload_stats = ""  # query to retrieve all current and historical upload stats
-            flash(e, "alert-danger")
+            flash("Are you sure this is a Facebook zip file? " +
+                  str(e), "alert-danger")
             return render_template(
-                "facebook/facebook-upload.html", upload_stats=upload_stats)
+                "facebook/facebook-upload.html", upload=upload_success, breadcrumb="Facebook / Upload content")
 
         # TODO: ENCRYPT FILES
 
         # TODO: Add uploaded and parsed Facebook files to Filecoin
 
-    upload_stats = ""  # query to retrieve all current and historical upload stats
-
-    return render_template("facebook/facebook-upload.html", upload_stats=upload_stats, breadcrumb="Facebook / Upload content")
+    return render_template("facebook/facebook-upload.html", upload=upload_success, breadcrumb="Facebook / Upload content")
 
 
 @ app.route('/facebook-view')
