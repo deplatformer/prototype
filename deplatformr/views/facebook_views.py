@@ -1,4 +1,5 @@
 import os
+from datetime import datetime
 from flask import Flask, render_template, request, flash
 from werkzeug.utils import secure_filename
 from flask_user import login_required, current_user
@@ -96,7 +97,18 @@ def facebook_upload():
 @ app.route('/facebook-view')
 @ login_required
 def facebook_view():
-    return render_template("facebook/facebook-view.html", breadcrumb="Facebook / View content")
+
+    day = datetime.now().strftime("%d")
+    month_script = datetime.now().strftime("%b")
+
+    return render_template("facebook/facebook-view.html", breadcrumb="Facebook / View content", this_day=day, this_month=month_script)
+
+
+@ app.route('/facebook-memories')
+@ login_required
+def facebook_memories():
+
+    return render_template("facebook/facebook-memories.html", breadcrumb="Facebook / View content / Memories")
 
 
 @ app.route('/facebook-manage')
