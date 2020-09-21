@@ -20,3 +20,11 @@ class User(db.Model, UserMixin):
         db.String(100, collation='NOCASE'), nullable=False, server_default='')
     last_name = db.Column(
         db.String(100, collation='NOCASE'), nullable=False, server_default='')
+
+
+class UserDirectories(db.Model):
+    __tablename__ = 'user_directories'
+    id = db.Column(db.Integer, primary_key=True)
+    platform = db.Column(db.String(), nullable=False)
+    directory = db.Column(db.String(), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)

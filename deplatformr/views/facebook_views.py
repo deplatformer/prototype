@@ -1,9 +1,10 @@
 import os
+import sqlite3
 from datetime import datetime
 from flask import Flask, render_template, request, flash
 from werkzeug.utils import secure_filename
 from flask_user import login_required, current_user
-from deplatformr import app
+from deplatformr import app, db
 from deplatformr.helpers.helpers import unzip
 from deplatformr.helpers.facebook_helpers import posts_to_db
 
@@ -62,6 +63,16 @@ def facebook_upload():
         print("Extracting zip file")  # TODO: move to async user output
         try:
             unzip_dir = unzip(os.path.join(facebook_dir, file_name))
+            try:
+                # Record the location of the user's Facebook content
+                deplatformr_db = sqlite3.connect(
+                    "deplatformr/" + app.config["SQLALCHEMY_DATABASE_URI"][10:])
+                cursor = deplatformr_db.cursor()
+                cursor.execute(
+                    "INSERT INTO user_directories (user_id, platform, directory) VALUES (?,?,?)", [current_user.id, "facebook", unzip_dir, ],)
+                deplatformr_db.commit()
+            except Exception as e:
+                print(e)
         except:
             flash("Unable to extract zip file.", "alert-danger")
             return render_template(
