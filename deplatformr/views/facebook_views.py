@@ -6,7 +6,7 @@ from werkzeug.utils import secure_filename
 from flask_user import login_required, current_user
 from deplatformr import app, db
 from deplatformr.helpers.helpers import unzip
-from deplatformr.helpers.facebook_helpers import posts_to_db
+from deplatformr.helpers.facebook_helpers import posts_to_db, activate_hyperlinks, clean_nametags
 
 
 @app.route('/facebook-deplatform')
@@ -34,7 +34,8 @@ def facebook_upload():
             os.makedirs(upload_path)
 
         # Create a subdirectory per username. Usernames are unique.
-        user_dir = os.path.join(upload_path, current_user.username)
+        user_dir = os.path.join(
+            upload_path, str(current_user.id) + "-" + current_user.username)
         if not os.path.exists(user_dir):
             os.makedirs(user_dir)
 
