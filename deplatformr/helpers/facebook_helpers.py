@@ -37,6 +37,36 @@ def activate_hyperlinks(post):
     return(post, url_count)
 
 
+def cut_hyperlinks(post):
+
+    post_length = len(post)
+    post_slice = post
+    slice_length = post_length
+    i = 0
+    urls = []
+    while i < post_length:
+        url = ""
+        http = post_slice.find("http")
+
+        if http == -1:
+            break
+
+        for i in range(http, slice_length):
+            url += post_slice[i]
+            if i == slice_length - 1:
+                break
+            if post_slice[i + 1] == " ":
+                break
+
+        post = post.replace(url, "")
+        urls.append(url)
+
+        post_slice = post_slice[slice(i + 1, post_length)]
+        slice_length = len(post_slice)
+
+    return(post, urls)
+
+
 def clean_nametags(post):
 
     post_length = len(post)

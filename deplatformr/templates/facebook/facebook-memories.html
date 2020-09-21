@@ -1,6 +1,101 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div id='header'>
+<H1>On this day, {{ month_script }} {{ day }} :</H1>
+
+<div class='container-fluid'>
+
+{% if media_posts %}
+
+    {% for key in media_posts %}
+        <div class='post'>
+        <div id='on-this-day'>
+            {{ media_posts[key]["time_lapse"] }} years ago today (in {{ media_posts[key]["post_year"] }}), you posted:
+        </div>
+
+        <div class='description d-block mx-auto'>
+            {% if media_posts[key]["post"] %}
+                <p>{{ media_posts[key]["post"] }}</p>
+            {% endif %}
+        </div>
+
+        <!-- TODO: Add URL previews -->
+        {% if media_posts[key]["urls"] %}
+            {% for url in media_posts[key]["urls"] %}
+                <p><a href='{{ url }}'>{{ url }}</a></p>
+            {% endfor %}
+        {% endif %}
+
+        {% if media_posts[key]["files"] %}
+            {% for filekey in media_posts[key]["files"] %}
+
+                {% if media_posts[key]["files"][filekey]["file_post"] %}
+                    {{ media_posts[key]["files"][filekey]["file_post"]}}
+                {% endif %}
+
+                <!-- TODO: Add URL previews -->
+                {% if media_posts[key]["files"][filekey]["urls"] %}
+                    {% for url in media_posts[key]["files"][filekey]["urls"] %}
+                        <p><a href='{{ url }}'>{{ url }}</a></p>
+                    {% endfor %}
+                {% endif %}
+
+                {% if media_posts[key]["files"][filekey]["mimetype"] == "video" %}
+                    VIDEO: {{ media_posts[key]["files"][filekey]["filepath"]}}
+                {% else %}
+                    IMAGE: {{ media_posts[key]["files"][filekey]["filepath"]}}
+                {% endif %}
+
+            {% endfor %}
+        {% endif %}
+
+        <hr />
+
+    {% endfor %}
+{% else %}
+<div class='description d-block mx-auto'>You did not upload any photos or videos on this day.</div>
+
+{% endif %}
+
+
+
+{% if non_media_posts %}
+    <div class='description d-block mx-auto'>
+    <a onClick='showposts()' href='#more-posts'>View other posts</a></div>
+    <div id='more-posts'>
+    {% for key in non_media_posts %}
+        <div class='post'>
+            <div id='on-this-day'>
+                {{ non_media_posts[key]["time_lapse"] }} years ago today (in {{ non_media_posts[key]["post_year"] }}), you posted:
+            </div>
+
+            <div class='description d-block mx-auto'>
+            {% if non_media_posts[key]["post"] %}
+                <p>{{ non_media_posts[key]["post"] }}</p>
+            {% endif %}
+
+            {% if non_media_posts[key]["url_label"] %}
+                <p>{{ non_media_posts[key]["url_label"] }}</p>
+            {% endif %}
+
+            <!-- TODO: Add URL previews -->
+            {% if non_media_posts[key]["urls"] %}
+                {% for url in non_media_posts[key]["urls"] %}
+                    <p><a href='{{ url }}'>{{ url }}</a></p>
+                {% endfor %}
+            {% endif %}
+
+            </div>
+        </div>
+    {% endfor %}
+
+    </div>
+{% endif %}
+
+
+</div>
+
 
 {% endblock %}
 
