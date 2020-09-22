@@ -170,11 +170,18 @@ def facebook_memories():
 
             files = {}
             for file in media:
-                if file[3] is not None:
+                if (file[3] is not None):
                     if file[3] != post[2]:
                         clean_post_names = clean_nametags(file[3])
                         file_parsed_post, file_urls = cut_hyperlinks(
                             clean_post_names)
+                    else:
+                        file_parsed_post = None
+                        file_urls = None
+                else:
+                    if (post[2] is None) or (post[2] == ""):
+                        file_parsed_post = file[2]
+                        file_urls = None
                 extension = os.path.splitext(file[6])
                 if extension[1] == ".mp4":
                     mimetype = "video"
@@ -184,8 +191,7 @@ def facebook_memories():
                 files.update({file[0]: {
                     "file_post": file_parsed_post,
                     "urls": file_urls,
-                    "mimetype": mimetype,
-                    "filepath": filepath}})
+                    "mimetype": mimetype}})
                 # reset parsed_post so that it's not re-used for entries that don't have a file[3]
                 file_parsed_post = None
                 file_urls = None

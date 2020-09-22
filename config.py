@@ -1,7 +1,7 @@
 import os
 
 
-basedir = os.path.abspath(os.path.dirname(__file__))
+BASEDIR = os.path.abspath(os.path.dirname(__file__))
 UPLOADDIR = "_user_data/"
 
 # Flask settings

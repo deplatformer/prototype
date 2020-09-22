@@ -1,15 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div id='header'>
+<div class='header-green'>
 <H1>On this day, {{ month_script }} {{ day }} :</H1>
+</div>
 
-<div class='container-fluid'>
+<div class='container-fluid feed'>
 
 {% if media_posts %}
 
     {% for key in media_posts %}
-        <div class='post'>
+        <div class='post container-fluid'>
         <div id='on-this-day'>
             {{ media_posts[key]["time_lapse"] }} years ago today (in {{ media_posts[key]["post_year"] }}), you posted:
         </div>
@@ -18,7 +19,7 @@
             {% if media_posts[key]["post"] %}
                 <p>{{ media_posts[key]["post"] }}</p>
             {% endif %}
-        </div>
+
 
         <!-- TODO: Add URL previews -->
         {% if media_posts[key]["urls"] %}
@@ -31,7 +32,7 @@
             {% for filekey in media_posts[key]["files"] %}
 
                 {% if media_posts[key]["files"][filekey]["file_post"] %}
-                    {{ media_posts[key]["files"][filekey]["file_post"]}}
+                    <p>{{ media_posts[key]["files"][filekey]["file_post"]}}</p>
                 {% endif %}
 
                 <!-- TODO: Add URL previews -->
@@ -42,16 +43,15 @@
                 {% endif %}
 
                 {% if media_posts[key]["files"][filekey]["mimetype"] == "video" %}
-                    VIDEO: {{ media_posts[key]["files"][filekey]["filepath"]}}
+                    <img src="/userfile/facebook/{{ filekey }}" />
                 {% else %}
-                    IMAGE: {{ media_posts[key]["files"][filekey]["filepath"]}}
+                    <img src="/userfile/facebook/{{ filekey }}" />
                 {% endif %}
 
             {% endfor %}
         {% endif %}
-
-        <hr />
-
+        </div>
+        </div>
     {% endfor %}
 {% else %}
 <div class='description d-block mx-auto'>You did not upload any photos or videos on this day.</div>
@@ -65,7 +65,7 @@
     <a onClick='showposts()' href='#more-posts'>View other posts</a></div>
     <div id='more-posts'>
     {% for key in non_media_posts %}
-        <div class='post'>
+        <div class='post container-fluid'>
             <div id='on-this-day'>
                 {{ non_media_posts[key]["time_lapse"] }} years ago today (in {{ non_media_posts[key]["post_year"] }}), you posted:
             </div>

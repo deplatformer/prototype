@@ -267,3 +267,55 @@ a.submenu {
 #upload-button:hover {
     background-color: #007bff;
 }
+
+/* Facebook Memories */
+
+.header-green {
+    background-color: #379683;
+    color: #FFF;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+    border-radius: .5rem;
+}
+
+.feed {
+    text-align: center;
+    margin-bottom: 100px;
+    padding: 0 100px;
+}
+
+.post {
+    margin-bottom: 50px;
+    padding: 20px;
+    background-color: #f7f7f7;
+    border: 2px solid #dfe3ee;
+}
+
+#on-this-day{
+    margin-bottom: 20px;
+    color: #379683;
+}
+
+.description{
+  max-width: 800px;
+  font-size: 120%;
+  margin-bottom: 20px;
+}
+
+.media {
+    margin-bottom: 20px;
+}
+
+.media img{
+    border: 1px solid #dfe3ee;
+}
+
+#more-posts {
+    display: none;
+}
+
+.name {
+    color: #3b5998;
+    font-weight: bold;
+}
