@@ -118,11 +118,16 @@ def posts_to_db(fb_dir):
     # Create database structure if it doesn't exist
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS posts(id INTEGER NOT NULL PRIMARY KEY, timestamp TEXT, post TEXT, media_files INTEGER, url TEXT, url_label TEXT, place_name TEXT, address TEXT, latitude TEXT, longitude TEXT, profile_update BOOLEAN)")
-    cursor.execute("CREATE TABLE IF NOT EXISTS media(id INTEGER NOT NULL PRIMARY KEY, timestamp TEXT, title TEXT, description TEXT, latitude TEXT, longitude TEXT, filepath TEXT, post_id INTEGER, FOREIGN KEY(post_id) REFERENCES posts(id))")
+    cursor.execute("CREATE TABLE IF NOT EXISTS media(id INTEGER NOT NULL PRIMARY KEY, timestamp TEXT, title TEXT, description TEXT, latitude TEXT, longitude TEXT, orientation INTEGER, filepath TEXT, post_id INTEGER, album_id INTEGER, FOREIGN KEY(post_id) REFERENCES posts(id), FOREIGN KEY(album_id) REFERENCES albums(id))")
+    cursor.execute("CREATE INDEX IF NOT EXISTS filepath ON media(filepath)")
+    cursor.execute("CREATE TABLE IF NOT EXISTS albums(id INTEGER NOT NULL PRIMARY KEY, last_modified TEXT, name TEXT, description TEXT, total_files INTEGER, cover_photo_id INTEGER, FOREIGN KEY(cover_photo_id) REFERENCES media(id))")
     cursor.execute(
         "CREATE TABLE IF NOT EXISTS tags(id INTEGER NOT NULL PRIMARY KEY, tag TEXT)")
     cursor.execute("CREATE TABLE IF NOT EXISTS tag_links(id INTEGER NOT NULL PRIMARY KEY, tag_id INTEGER, post_id INTEGER, FOREIGN KEY(tag_id) REFERENCES tags(id), FOREIGN KEY (post_id) REFERENCES posts(id))")
     db.commit()
+
+    # Add Albums with media files first so they can be referenced from posts
+    albums_to_db(fb_dir, db_name)
 
     # FB might include more than one posts JSON file
     files = os.listdir(fb_dir + "/posts/")
@@ -253,7 +258,7 @@ def posts_to_db(fb_dir):
                                 except:
                                     longitude = None
 
-                                cursor.executemany("INSERT INTO media (timestamp, title, description, latitude, longitude, filepath, post_id) VALUES (?,?,?,?,?,?,?)",
+                                cursor.executemany("INSERT INTO media (timestamp, title, description, latitude, longitude, orientation, filepath, post_id, album_id) VALUES (?,?,?,?,?,?,?,?,?)",
                                                    [
                                                        (
                                                            timestamp,
@@ -261,8 +266,10 @@ def posts_to_db(fb_dir):
                                                            description,
                                                            latitude,
                                                            longitude,
+                                                           None,
                                                            filepath,
                                                            post_id[0],
+                                                           None
                                                        )
 
                                                    ],
@@ -373,3 +380,111 @@ def posts_to_db(fb_dir):
     total_media = cursor.fetchone()
 
     return(total_posts, max_date, min_date, profile_updates, total_media)
+
+
+def albums_to_db(fb_dir, db_name):
+    # intiliaze database
+    db = sqlite3.connect(fb_dir + "/" + db_name + ".db")
+    cursor = db.cursor()
+
+    # FB includes one JSON file per album
+    files = os.listdir(fb_dir + "/photos_and_videos/album/")
+    for file in files:
+        file_split = os.path.splitext(file)
+        if file_split[1] == ".json":
+            # Read data from FB JSON file
+            f = open(os.path.join(fb_dir + "/photos_and_videos/album/" + file))
+            album = json.load(f)
+
+            try:
+                unix_time = album["last_modified_timestamp"]
+                last_modified = datetime.fromtimestamp(
+                    unix_time).strftime('%Y-%m-%d %H:%M:%S')
+            except:
+                last_modified = None
+            try:
+                description = album["description"]
+            except:
+                description = None
+            try:
+                name = album["name"]
+            except:
+                name = None
+            cover_photo = None  # get Media file id to use as foreign key
+            # Save album info
+            cursor.executemany("INSERT INTO albums (last_modified, name, description, cover_photo_id) VALUES (?,?,?,?)", [
+                (last_modified, name, description, cover_photo,)],)
+            db.commit()
+
+            # Get current album_id
+            cursor.execute("SELECT last_insert_rowid()")
+            album_id = cursor.fetchone()
+
+            for photo in album["photos"]:
+                try:
+                    filepath = (photo["uri"])
+                except:
+                    filepath = None
+                try:
+                    unix_time = photo["creation_timestamp"]
+                    timestamp = datetime.fromtimestamp(
+                        unix_time).strftime('%Y-%m-%d %H:%M:%S')
+                except:
+                    timestamp = None
+                try:
+                    title = ftfy.fix_text(photo["title"])
+                except:
+                    title = None
+                try:
+                    description = ftfy.fix_text(
+                        photo["description"])
+                except:
+                    description = None
+                try:
+                    latitude = photo["media_metadata"]["photo_metadata"]["latitude"]
+                except:
+                    latitude = None
+                try:
+                    longitude = photo["media_metadata"]["photo_metadata"]["longitude"]
+                except:
+                    longitude = None
+                try:
+                    orientation = photo["media_metadata"]["photo_metadata"]["orientation"]
+                except:
+                    orientation = None
+
+                cursor.executemany("INSERT INTO media (timestamp, title, description, latitude, longitude, orientation, filepath, post_id, album_id) VALUES (?,?,?,?,?,?,?,?,?)",
+                                   [
+                                       (
+                                           timestamp,
+                                           title,
+                                           description,
+                                           latitude,
+                                           longitude,
+                                           orientation,
+                                           filepath,
+                                           None,
+                                           album_id[0]
+                                       )
+
+                                   ],
+                                   )
+                db.commit()
+
+            # Count total number of photos for this album
+            cursor.execute(
+                "SELECT COUNT(id) FROM media WHERE album_id=?", (album_id[0],))
+            total_files = cursor.fetchone()
+            # Get cover photo id for this album
+            cursor.execute("SELECT id FROM media where filepath=?",
+                           (album["cover_photo"]["uri"],))
+            cover_photo = cursor.fetchone()
+            try:
+                cover_photo_id = cover_photo[0]
+            except:
+                cover_photo_id = None
+            # Update album record with number of photos and cover_photo_id
+            cursor.execute(
+                "UPDATE albums SET total_files=?, cover_photo_id=? WHERE id=?", (total_files[0], cover_photo_id, album_id[0],))
+            db.commit()
+    return()
