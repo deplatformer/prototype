@@ -126,7 +126,7 @@ def posts_to_db(fb_dir):
     cursor.execute("CREATE TABLE IF NOT EXISTS tag_links(id INTEGER NOT NULL PRIMARY KEY, tag_id INTEGER, post_id INTEGER, FOREIGN KEY(tag_id) REFERENCES tags(id), FOREIGN KEY (post_id) REFERENCES posts(id))")
     db.commit()
 
-    # Add Albums with media files first so they can be referenced from posts
+    # Add albums with media files first so they can be referenced from posts
     albums_to_db(fb_dir, db_name)
 
     # FB might include more than one posts JSON file
@@ -231,50 +231,19 @@ def posts_to_db(fb_dir):
                         for key, value in attachment.items():
                             if key == "media":
                                 try:
+                                    # match filepath to an existing media record
                                     filepath = (value["uri"])
-                                except:
-                                    filepath = None
-                                try:
-                                    unix_time = value["creation_timestamp"]
-                                    timestamp = datetime.fromtimestamp(
-                                        unix_time).strftime('%Y-%m-%d %H:%M:%S')
-                                except:
-                                    timestamp = None
-                                try:
-                                    title = ftfy.fix_text(value["title"])
-                                except:
-                                    title = None
-                                try:
-                                    description = ftfy.fix_text(
-                                        value["description"])
-                                except:
-                                    description = None
-                                try:
-                                    latitude = value["media_metadata"]["photo_metadata"]["latitude"]
-                                except:
-                                    latitude = None
-                                try:
-                                    longitude = value["media_metadata"]["photo_metadata"]["longitude"]
-                                except:
-                                    longitude = None
+                                    cursor.execute(
+                                        "SELECT id FROM media where filepath=?", (filepath,))
+                                    media_file = cursor.fetchone()
+                                    # Update media record with post_id
+                                    cursor.execute(
+                                        "UPDATE media SET post_id=? WHERE id=?", (post_id[0], media_file[0],))
+                                    db.commit()
 
-                                cursor.executemany("INSERT INTO media (timestamp, title, description, latitude, longitude, orientation, filepath, post_id, album_id) VALUES (?,?,?,?,?,?,?,?,?)",
-                                                   [
-                                                       (
-                                                           timestamp,
-                                                           title,
-                                                           description,
-                                                           latitude,
-                                                           longitude,
-                                                           None,
-                                                           filepath,
-                                                           post_id[0],
-                                                           None
-                                                       )
-
-                                                   ],
-                                                   )
-                                db.commit()
+                                except Exception as e:
+                                    print(str(post_id[0]) +
+                                          ": media file not found")
 
                     # Count total number of media files for this post
                     cursor.execute(
@@ -304,31 +273,6 @@ def posts_to_db(fb_dir):
         try:
             # Check whether the update is linked to a media file, if not, loop will continue
             filepath = update["attachments"][0]["data"][0]["media"]["uri"]
-            # Get media metadata
-            try:
-                unix_time = update["attachments"][0]["data"][0]["media"]["creation_timestamp"]
-                creation_timestamp = datetime.fromtimestamp(
-                    unix_time).strftime('%Y-%m-%d %H:%M:%S')
-            except:
-                creation_timestamp = None
-            try:
-                title = ftfy.fix_text(
-                    update["attachments"][0]["data"][0]["media"]["title"])
-            except:
-                title = None
-            try:
-                description = ftfy.fix_text(
-                    update["attachments"][0]["data"][0]["media"]["description"])
-            except:
-                description = None
-            try:
-                latitude = update["attachments"][0]["data"][0]["media"]["media_metadata"]["photo_metadata"]["latitude"]
-            except:
-                latitude = None
-            try:
-                longitude = update["attachments"][0]["data"][0]["media"]["media_metadata"]["photo_metadata"]["longitude"]
-            except:
-                longitude = None
 
             # Get profile update metadata
             try:
@@ -347,14 +291,30 @@ def posts_to_db(fb_dir):
                 (timestamp, title, 1, True,)],)
             db.commit()
 
-            # Get current post_id
-            cursor.execute("SELECT last_insert_rowid()")
-            post_id = cursor.fetchone()
+            try:
+                # Get current post_id
+                cursor.execute("SELECT last_insert_rowid()")
+                post_id = cursor.fetchone()
+            except:
+                print("post id not found")
 
-            # Save media info
-            cursor.executemany("INSERT INTO media (timestamp, title, description, latitude,longitude, filepath, post_id) VALUES (?,?,?,?,?,?,?)", [
-                               (timestamp, title, description, latitude, longitude, filepath, post_id[0],)],)
-            db.commit()
+            try:
+                # Get media_id using filepath
+                cursor.execute(
+                    "SELECT id FROM media where filepath=?", (filepath,))
+                media_file = cursor.fetchone()
+            except:
+                print("media file not found")
+            try:
+                # Update media record with post_id
+                cursor.execute(
+                    "UPDATE media SET post_id=? WHERE id=?", (post_id[0], media_file[0],))
+                db.commit()
+            except:
+                print("couldn't update media file with post id")
+                print(post_id)
+                print(filepath)
+                print(media_file)
 
         except:
             # Profile update does not have a media file attached, so don't include it
@@ -487,4 +447,28 @@ def albums_to_db(fb_dir, db_name):
             cursor.execute(
                 "UPDATE albums SET total_files=?, cover_photo_id=? WHERE id=?", (total_files[0], cover_photo_id, album_id[0],))
             db.commit()
+
+    # FB includes one directory of images that does not have a JSON file
+    # Save 'your_posts' as an album
+    cursor.execute("INSERT INTO albums (name) VALUES (?)", ("Your Posts",),)
+    db.commit()
+    
+    # Get album_id
+    cursor.execute("SELECT last_insert_rowid()")
+    album_id = cursor.fetchone()
+
+    files = os.listdir(fb_dir + "/photos_and_videos/your_posts/")
+    for file in files:
+        filepath = "/photos_and_videos/your_posts/" + file
+        cursor.executemany("INSERT INTO media (filepath, album_id) VALUES (?,?)",
+                   [
+                       (
+                           filepath,
+                           album_id[0]
+                       )
+
+                   ],
+                   )
+    db.commit()
+
     return()
