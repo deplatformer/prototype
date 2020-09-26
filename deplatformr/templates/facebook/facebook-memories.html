@@ -43,11 +43,14 @@
                 {% endif %}
 
                 {% if media_posts[key]["files"][filekey]["mimetype"] == "video" %}
-                    <img src="/userfile/facebook/{{ filekey }}" />
+                    <div class="embed-responsive embed-responsive-4by3">
+                      <iframe class="embed-responsive-item" src="/userfile/facebook/{{ filekey }}"></iframe>
+                    </div>
                 {% else %}
-                    <img src="/userfile/facebook/{{ filekey }}" />
+                    <img src="/userfile/facebook/{{ filekey }}" class="img-fluid" />
                 {% endif %}
 
+                
             {% endfor %}
         {% endif %}
         </div>

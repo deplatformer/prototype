@@ -290,6 +290,11 @@ a.submenu {
     padding: 20px;
     background-color: #f7f7f7;
     border: 2px solid #dfe3ee;
+    max-width: 900px;
+}
+
+.post img{
+    border: 1px solid #dfe3ee;
 }
 
 #on-this-day{
@@ -303,19 +308,8 @@ a.submenu {
   margin-bottom: 20px;
 }
 
-.media {
-    margin-bottom: 20px;
-}
-
-.media img{
-    border: 1px solid #dfe3ee;
-}
-
 #more-posts {
     display: none;
 }
 
-.name {
-    color: #3b5998;
-    font-weight: bold;
-}
+
