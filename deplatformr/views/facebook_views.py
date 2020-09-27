@@ -143,7 +143,7 @@ def facebook_view():
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
-    cursor.execute("SELECT * FROM albums")
+    cursor.execute("SELECT * FROM albums ORDER BY last_modified DESC")
     albums = cursor.fetchall()
 
     # Sort albums so that Profile Pictures, Cover Photos, and Videos come first
@@ -315,7 +315,7 @@ def facebook_album(album_id):
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
-    cursor.execute("SELECT * FROM media WHERE album_id = ?", (album_id,),)
+    cursor.execute("SELECT * FROM media WHERE album_id = ? ORDER BY timestamp DESC", (album_id,),)
     files = cursor.fetchall()
     cursor.execute("SELECT * FROM albums WHERE id = ?", (album_id,),)
     album = cursor.fetchone()
