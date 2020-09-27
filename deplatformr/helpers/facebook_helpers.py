@@ -461,4 +461,42 @@ def albums_to_db(fb_dir, db_name):
                                (filepath, album_id[0])],)
             db.commit()
 
+    # Include the video directory
+    if os.path.isdir(fb_dir + "/photos_and_videos/videos/"):
+        cursor.execute("INSERT INTO albums (name) VALUES (?)", ("Videos",),)
+        db.commit()
+
+        # Get album_id
+        cursor.execute("SELECT last_insert_rowid()")
+        album_id = cursor.fetchone()
+
+        if os.path.isfile(fb_dir + "/photos_and_videos/your_videos.json"):
+            f = open(fb_dir + "/photos_and_videos/your_videos.json")
+            videos = json.load(f)
+            for video in videos["videos"]:
+                try:
+                    timestamp = video["creation_timestamp"]
+                except:
+                    timestamp = None
+                try:
+                    filepath = video["uri"]
+                except:
+                    filepath = None
+                try:
+                    description = video["description"]
+                except:
+                    description = None
+                cursor.executemany("INSERT INTO media (timestamp, description, filepath, album_id) VALUES (?,?,?,?)",
+                                   [
+                                       (
+                                           timestamp,
+                                           description,
+                                           filepath,
+                                           album_id[0]
+                                       )
+
+                                   ],
+                                   )
+                db.commit()
+
     return()

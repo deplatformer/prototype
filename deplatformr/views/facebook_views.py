@@ -91,7 +91,7 @@ def facebook_upload():
                 unzip_dir)
             # Output upload stats
             flash("Saved " + str(total_posts[0]) + " posts between " + min_date[0] + " and " + max_date[0] + ". This includes " + str(
-                profile_updates) + " profile updates. " + str(total_media[0]) + " media files were linked.", "alert-success")
+                profile_updates) + " profile updates. " + str(total_media[0]) + " media files were uploaded.", "alert-success")
             upload_success = True
         except Exception as e:
             flash("Are you sure this is a Facebook zip file? " +
