@@ -29,7 +29,7 @@
     <div class="card" style="margin-top: 30px; text-align:center">
       {% if album[2] == "Videos" %}
        <div class="embed-responsive embed-responsive-4by3">
-         <iframe class="embed-responsive-item" src="/userfile/facebook/{{ album[5] }}"></iframe>
+         <video controls><source src="/userfile/facebook/{{ album[5] }}" /></video>
         </div>
       {% else %}
         <img class="card-img-top img-fluid" src="/userfile/facebook/{{ album[5] }}" alt="Card image cap">

@@ -24,8 +24,8 @@
   <div class="col">
     <div class="card" style="margin-top: 30px; text-align:center">
       {% if album[2] == "Videos" %}
-       <div class="embed-responsive embed-responsive-4by3">
-         <iframe class="embed-responsive-item" src="/userfile/facebook/{{ file[0] }}"></iframe>
+        <div class="embed-responsive embed-responsive-4by3">
+          <video controls><source src="/userfile/facebook/{{ file[0] }}" /></video>
         </div>
       {% else %}
         <a href="/userfile/facebook/{{ file[0] }}">
