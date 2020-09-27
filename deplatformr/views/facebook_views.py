@@ -134,7 +134,27 @@ def facebook_view():
     cursor.execute("SELECT * FROM albums")
     albums = cursor.fetchall()
 
-    return render_template("facebook/facebook-view2.html", breadcrumb="Facebook / View content", this_day=day, this_month=month_script, albums=albums)
+    # Sort albums so that Profile Pictures, Cover Photos, and Videos come first
+    for i in range(0, len(albums)):
+        if "Videos" in albums[i][2]:
+            videos = albums[i]
+            albums.pop(i)
+            albums.insert(0, videos)
+            break
+    for i in range(0, len(albums)):
+        if "Cover Photos" in albums[i][2]:
+            covers = albums[i]
+            albums.pop(i)
+            albums.insert(0, covers)
+            break
+    for i in range(0, len(albums)):
+        if "Profile Pictures" in albums[i][2]:
+            profiles = albums[i]
+            albums.pop(i)
+            albums.insert(0, profiles)
+            break
+
+    return render_template("facebook/facebook-view.html", breadcrumb="Facebook / View content", this_day=day, this_month=month_script, albums=albums)
 
 
 @ app.route('/facebook-memories')
@@ -164,6 +184,7 @@ def facebook_memories():
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
+    # Right now set to select all posts for testing purposes
     cursor.execute("SELECT * FROM posts")
     """
     cursor.execute(
@@ -203,12 +224,12 @@ def facebook_memories():
                     if (post[2] is None) or (post[2] == ""):
                         file_parsed_post = file[2]
                         file_urls = None
-                extension = os.path.splitext(file[6])
+                extension = os.path.splitext(file[7])
                 if extension[1] == ".mp4":
                     mimetype = "video"
                 else:
                     mimetype = "image"
-                filepath = file[6]
+                filepath = file[7]
                 files.update({file[0]: {
                     "file_post": file_parsed_post,
                     "urls": file_urls,
@@ -253,6 +274,36 @@ def facebook_memories():
                 parsed_post = None
 
     return render_template("facebook/facebook-memories.html", breadcrumb="Facebook / View content / Memories", month_script=month_script, day=day, media_posts=media_posts, non_media_posts=non_media_posts)
+
+
+@ app.route('/facebook-album/<album_id>')
+@ login_required
+def facebook_album(album_id):
+
+    deplatformr_db = sqlite3.connect(
+        "deplatformr/" + app.config["SQLALCHEMY_DATABASE_URI"][10:])
+    cursor = deplatformr_db.cursor()
+    cursor.execute(
+        "SELECT directory FROM user_directories WHERE user_id = ? AND platform = ?", (current_user.id, "facebook",),)
+    directory = cursor.fetchone()
+
+    if directory is None:
+        flash("Facebook data not found.", "alert-danger")
+        return render_template(
+            "facebook/facebook-view.html", breadcrumb="Facebook / View content ")
+
+    fb_dir = directory[0]
+    db_name = os.path.basename(os.path.normpath(fb_dir))
+    fb_db = fb_dir + "/" + str(db_name) + ".db"
+
+    facebook_db = sqlite3.connect(fb_db)
+    cursor = facebook_db.cursor()
+    cursor.execute("SELECT * FROM media WHERE album_id = ?", (album_id,),)
+    files = cursor.fetchall()
+    cursor.execute("SELECT * FROM albums WHERE id = ?", (album_id,),)
+    album = cursor.fetchone()
+
+    return render_template("facebook/facebook-album.html", breadcrumb="Facebook / View content / Albums", files=files, album=album)
 
 
 @ app.route('/facebook-manage')

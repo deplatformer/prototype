@@ -15,74 +15,42 @@
 
 <i class="fa fa-caret-right" style="margin-right: 5px;"></i>Your <i class="fab fa-facebook fa-lg" style="margin: 0 5px;"></i> albums:
 
-<div class="row">
-<div class="col">
+<div id="albums">
 
- <a href="#"><div class="card" style="width: 18rem; margin-top: 30px; text-align:center">
- <img class="card-img-top" src="static/_tmp/family.jpg" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Family</p>
-  </div>
-</div></a>
-</div>
+{% for album in albums %}
 
-<div class="col">
+  {% if (loop.index == 1) or (loop.index % 4 == 0) %}
+    <div class="row">
+  {% endif %}  
 
-  <a href="#"><div class="card" style="width: 18rem; margin-top: 30px; text-align: center;">
-<img class="card-img-top" src="static/_tmp/travel.jpg" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Travel</p>
-  </div>
-</div></a>
+  <div class="col">
 
-</div>
+    <a href="/facebook-album/{{ album[0] }}">
+    <div class="card" style="margin-top: 30px; text-align:center">
+      {% if album[2] == "Videos" %}
+       <div class="embed-responsive embed-responsive-4by3">
+         <iframe class="embed-responsive-item" src="/userfile/facebook/{{ album[5] }}"></iframe>
+        </div>
+      {% else %}
+        <img class="card-img-top img-fluid" src="/userfile/facebook/{{ album[5] }}" alt="Card image cap">
+      {% endif %}
+      <div class="card-body">
+          <p class="card-text">{{ album[2] }}</p> </a>
+          <p class="card-text small_note">  {{ album[4]}} files</p>
+      </div>
+    </div>
+ 
 
+ </div> <!-- column -->
 
-<div class="col">
-
-  <a href="#"><div class="card" style="width: 18rem; margin-top: 30px; text-align: center;">
-<img class="card-img-top" src="static/_tmp/profile.jpg" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Profile Photos</p>
-  </div>
-</div></a>
-
-</div>
-
-</div>
-
-
-<div class ="row">
+  {% if loop.index % 3 == 0 %}
+    </div> <!-- row -->
+  {% endif %}
   
-
-<div class="col">
-
-  <a href="#"><div class="card" style="width: 18rem; margin-top: 30px; text-align:center;">
-<img class="card-img-top" src="static/_tmp/cover.jpg" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Cover Photos</p>
-  </div>
-</div></a>
-
-</div>
-
-    <div class="col">
+{% endfor %}
 
 
- <a href="#"><div class="card" style="width: 18rem; margin-top: 30px; text-align: center;">
- <img class="card-img-top" src="static/_tmp/video.png" alt="Card image cap">
-  <div class="card-body">
-    <p class="card-text">Videos</p>
-  </div>
-</div></a>
-
-</div>
-
-<div class="col">
-</div>
-</div>
-
-
+</div> <!-- albums -->
 </div>
 
 {% endblock %}

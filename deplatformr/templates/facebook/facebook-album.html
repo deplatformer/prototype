@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div style="margin-left: 20px;">
+
+<div class='header-green'><H1>{{ album[2] }}</H1></div>
+
+
+<div id="albums">
+
+{% for file in files %}
+
+  {% if (loop.index == 1) or (loop.index % 5 == 0) %}
+    <div class="row">
+  {% endif %}  
+
+  <div class="col">
+
+    <div class="card" style="margin-top: 30px; text-align:center">
+      {% if album[2] == "Videos" %}
+       <div class="embed-responsive embed-responsive-4by3">
+         <iframe class="embed-responsive-item" src="/userfile/facebook/{{ file[0] }}"></iframe>
+        </div>
+      {% else %}
+        <a href="/userfile/facebook/{{ file[0] }}">
+        <img class="card-img-top img-fluid" src="/userfile/facebook/{{ file[0] }}" alt="Card image cap">
+        </a>
+      {% endif %}
+      {% if file[3] %}
+        <div class="card-body">
+        <p class="card-text">{{ file[3] }}</p>
+        </div>
+      {% endif %}
+    </div>
+ 
+ </div> <!-- column -->
+
+  {% if loop.index % 4 == 0 %}
+    </div> <!-- row -->
+  {% endif %}
+  
+{% endfor %}
+
+
+</div> <!-- albums -->
+</div>
+
+{% endblock %}
+
+
