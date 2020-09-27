@@ -189,8 +189,10 @@ def facebook_memories():
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
-    # Right now set to select all posts for testing purposes
-    cursor.execute("SELECT * FROM posts")
+    # Right now set to select for a specific date for testing purposes
+    cursor.execute(
+        "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
+    # Uncomment this string to have Memories properly set to current day
     """
     cursor.execute(
         "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
