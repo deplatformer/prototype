@@ -4,19 +4,25 @@
 
 <div style="margin-left: 20px;">
 
-<div class='header-green'><H1>{{ album[2] }}</H1></div>
+<H1>{{ album[2] }}</H1>
 
+{% if album[3] %}
+  <div class="small_note">{{ album[3] }}</div>
+{% endif %}
+
+<hr style="margin: 10px 0" />
+
+<div class="small_note"><a href="{{ url_for('facebook_view') }}">back</a></div>
 
 <div id="albums">
 
 {% for file in files %}
 
-  {% if (loop.index == 1) or (loop.index % 5 == 0) %}
+  {% if (loop.index == 1) %}
     <div class="row">
   {% endif %}  
 
   <div class="col">
-
     <div class="card" style="margin-top: 30px; text-align:center">
       {% if album[2] == "Videos" %}
        <div class="embed-responsive embed-responsive-4by3">
@@ -24,7 +30,7 @@
         </div>
       {% else %}
         <a href="/userfile/facebook/{{ file[0] }}">
-        <img class="card-img-top img-fluid" src="/userfile/facebook/{{ file[0] }}" alt="Card image cap">
+        <img class="card-img-top img-fluid" src="/userfile/facebook/{{ file[0] }}" title="posted {{ album[1] }}">
         </a>
       {% endif %}
       {% if file[3] %}
@@ -38,9 +44,12 @@
 
   {% if loop.index % 4 == 0 %}
     </div> <!-- row -->
+     <div class="row">
   {% endif %}
   
 {% endfor %}
+
+<!-- might have an open row div remaining -->
 
 
 </div> <!-- albums -->

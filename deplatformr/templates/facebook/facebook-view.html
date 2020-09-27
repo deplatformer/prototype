@@ -19,7 +19,7 @@
 
 {% for album in albums %}
 
-  {% if (loop.index == 1) or (loop.index % 4 == 0) %}
+  {% if (loop.index == 1) %}
     <div class="row">
   {% endif %}  
 
@@ -45,10 +45,12 @@
 
   {% if loop.index % 3 == 0 %}
     </div> <!-- row -->
+    <div class="row">
   {% endif %}
   
 {% endfor %}
 
+<!-- might have an open row div remaining -->
 
 </div> <!-- albums -->
 </div>
