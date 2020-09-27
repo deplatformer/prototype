@@ -196,14 +196,14 @@ def facebook_memories():
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
-    # Right now set to select for a specific date for testing purposes
-    cursor.execute(
-        "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
-    # Uncomment this string to have Memories properly set to current day
-    """
-    cursor.execute(
-        "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
-    """
+    # Check if demo data is being used
+    if os.path.split(fb_dir)[1] == "facebook-deplatformr":
+        # Prime for demo response
+        cursor.execute(
+            "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
+    else:
+        cursor.execute(
+            "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
     posts = cursor.fetchall()
 
     media_posts = {}
@@ -315,7 +315,8 @@ def facebook_album(album_id):
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
-    cursor.execute("SELECT * FROM media WHERE album_id = ? ORDER BY timestamp DESC", (album_id,),)
+    cursor.execute(
+        "SELECT * FROM media WHERE album_id = ? ORDER BY timestamp DESC", (album_id,),)
     files = cursor.fetchall()
     cursor.execute("SELECT * FROM albums WHERE id = ?", (album_id,),)
     album = cursor.fetchone()
