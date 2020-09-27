@@ -467,7 +467,8 @@ def albums_to_db(fb_dir, db_name):
         total_files = cursor.fetchone()
 
         # Update album record with number of photos and cover_photo_id
-        cursor.execute("UPDATE albums SET total_files=? WHERE id=?", (total_files[0], album_id[0],))
+        cursor.execute("UPDATE albums SET total_files=? WHERE id=?",
+                       (total_files[0], album_id[0],))
         db.commit()
 
     # Include the video directory
@@ -484,14 +485,20 @@ def albums_to_db(fb_dir, db_name):
             videos = json.load(f)
             for video in videos["videos"]:
                 try:
-                    unix_time = video["creation_timestamp"]
-                    timestamp = datetime.fromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M:%S')
-                except:
-                    timestamp = None
-                try:
                     filepath = video["uri"]
                 except:
-                    filepath = None
+                    # Video file does not exist
+                    continue
+                if filepath[:18] != "photos_and_videos/":
+                    # Don't inlude links to external videos
+                    continue
+                print(filepath)
+                try:
+                    unix_time = video["creation_timestamp"]
+                    timestamp = datetime.fromtimestamp(
+                        unix_time).strftime('%Y-%m-%d %H:%M:%S')
+                except:
+                    timestamp = None
                 try:
                     description = video["description"]
                 except:
@@ -520,7 +527,8 @@ def albums_to_db(fb_dir, db_name):
         cover_video = cursor.fetchone()
 
         # Update album record with number of vidoes
-        cursor.execute("UPDATE albums SET total_files=?, cover_photo_id=? WHERE id=?", (total_files[0], cover_video[0], album_id[0],))
+        cursor.execute("UPDATE albums SET total_files=?, cover_photo_id=? WHERE id=?",
+                       (total_files[0], cover_video[0], album_id[0],))
         db.commit()
 
     return()
