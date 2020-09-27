@@ -484,7 +484,8 @@ def albums_to_db(fb_dir, db_name):
             videos = json.load(f)
             for video in videos["videos"]:
                 try:
-                    timestamp = video["creation_timestamp"]
+                    unix_time = video["creation_timestamp"]
+                    timestamp = datetime.fromtimestamp(unix_time).strftime('%Y-%m-%d %H:%M:%S')
                 except:
                     timestamp = None
                 try:
