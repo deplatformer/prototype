@@ -1,9 +1,11 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class='header-green'>
-<H1>On this day, {{ month_script }} {{ day }} :</H1>
-</div>
+
+
+<div class="small_note" style="float:right; color:#FFF; margin-right: 10px;">send daily as <a href="#" style="color: #FFF; text-decoration: underline;">email</a> | <a href="#" style="color: #FFF; text-decoration: underline;">text</a></div>
+
+<div class='header-green' style="text-align: left; padding-left: 20px;"><H1>On this day, {{ month_script }} {{ day }}:</H1></div>
 
 <div class='container-fluid feed'>
 
