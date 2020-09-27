@@ -74,8 +74,15 @@ def facebook_upload():
                 deplatformr_db = sqlite3.connect(
                     "deplatformr/" + app.config["SQLALCHEMY_DATABASE_URI"][10:])
                 cursor = deplatformr_db.cursor()
-                cursor.execute(
-                    "INSERT INTO user_directories (user_id, platform, directory) VALUES (?,?,?)", [current_user.id, "facebook", unzip_dir, ],)
+                cursor.execute("SELECT id from user_directories WHERE platform=? AND user_id=?", [
+                               "facebook", current_user.id],)
+                directory_id = cursor.fetchone()
+                if directory_id is None:                
+                    cursor.execute(
+                        "INSERT INTO user_directories (user_id, platform, directory) VALUES (?,?,?)", [current_user.id, "facebook", unzip_dir, ],)
+                else:
+                    cursor.execute(
+                        "UPDATE user_directories SET directory=? WHERE user_id=?", [unzip_dir, current_user.id, ],)
                 deplatformr_db.commit()
             except Exception as e:
                 print(e)
