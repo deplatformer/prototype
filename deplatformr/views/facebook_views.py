@@ -113,7 +113,28 @@ def facebook_view():
     day = datetime.now().strftime("%d")
     month_script = datetime.now().strftime("%b")
 
-    return render_template("facebook/facebook-view.html", breadcrumb="Facebook / View content", this_day=day, this_month=month_script)
+    deplatformr_db = sqlite3.connect(
+        "deplatformr/" + app.config["SQLALCHEMY_DATABASE_URI"][10:])
+    cursor = deplatformr_db.cursor()
+    cursor.execute(
+        "SELECT directory FROM user_directories WHERE user_id = ? AND platform = ?", (current_user.id, "facebook",),)
+    directory = cursor.fetchone()
+
+    if directory is None:
+        flash("Facebook data not found.", "alert-danger")
+        return render_template(
+            "facebook/facebook-view.html", breadcrumb="Facebook / View content", this_day=day, this_month=month_script)
+
+    fb_dir = directory[0]
+    db_name = os.path.basename(os.path.normpath(fb_dir))
+    fb_db = fb_dir + "/" + str(db_name) + ".db"
+
+    facebook_db = sqlite3.connect(fb_db)
+    cursor = facebook_db.cursor()
+    cursor.execute("SELECT * FROM albums")
+    albums = cursor.fetchall()
+
+    return render_template("facebook/facebook-view2.html", breadcrumb="Facebook / View content", this_day=day, this_month=month_script, albums=albums)
 
 
 @ app.route('/facebook-memories')
