@@ -291,20 +291,15 @@ def posts_to_db(fb_dir):
                 (timestamp, title, 1, True,)],)
             db.commit()
 
-            try:
-                # Get current post_id
-                cursor.execute("SELECT last_insert_rowid()")
-                post_id = cursor.fetchone()
-            except:
-                print("post id not found")
+            # Get current post_id
+            cursor.execute("SELECT last_insert_rowid()")
+            post_id = cursor.fetchone()
 
-            try:
-                # Get media_id using filepath
-                cursor.execute(
-                    "SELECT id FROM media where filepath=?", (filepath,))
-                media_file = cursor.fetchone()
-            except:
-                print("media file not found")
+            # Get media_id using filepath
+            cursor.execute(
+                "SELECT id FROM media where filepath=?", (filepath,))
+            media_file = cursor.fetchone()
+
             try:
                 # Update media record with post_id
                 cursor.execute(
@@ -450,25 +445,20 @@ def albums_to_db(fb_dir, db_name):
 
     # FB includes one directory of images that does not have a JSON file
     # Save 'your_posts' as an album
-    cursor.execute("INSERT INTO albums (name) VALUES (?)", ("Your Posts",),)
-    db.commit()
-    
-    # Get album_id
-    cursor.execute("SELECT last_insert_rowid()")
-    album_id = cursor.fetchone()
+    if os.path.isdir(fb_dir + "/photos_and_videos/your_posts/"):
+        cursor.execute("INSERT INTO albums (name) VALUES (?)",
+                       ("Your Posts",),)
+        db.commit()
 
-    files = os.listdir(fb_dir + "/photos_and_videos/your_posts/")
-    for file in files:
-        filepath = "/photos_and_videos/your_posts/" + file
-        cursor.executemany("INSERT INTO media (filepath, album_id) VALUES (?,?)",
-                   [
-                       (
-                           filepath,
-                           album_id[0]
-                       )
+        # Get album_id
+        cursor.execute("SELECT last_insert_rowid()")
+        album_id = cursor.fetchone()
 
-                   ],
-                   )
-    db.commit()
+        files = os.listdir(fb_dir + "/photos_and_videos/your_posts/")
+        for file in files:
+            filepath = "photos_and_videos/your_posts/" + file
+            cursor.executemany("INSERT INTO media (filepath, album_id) VALUES (?,?)", [
+                               (filepath, album_id[0])],)
+            db.commit()
 
     return()
