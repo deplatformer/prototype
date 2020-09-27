@@ -1,4 +1,5 @@
 import os
+import shutil
 import sqlite3
 from datetime import datetime
 from flask import Flask, render_template, request, flash
@@ -42,6 +43,10 @@ def facebook_upload():
         # Create a Facebook subdirectory.
         facebook_dir = os.path.join(user_dir, "facebook")
         if not os.path.exists(facebook_dir):
+            os.makedirs(facebook_dir)
+        else:
+            # Remove an existing directory to avoid dbase entry duplication
+            shutil.rmtree(facebook_dir)
             os.makedirs(facebook_dir)
 
         # Save the uploaded file
