@@ -272,8 +272,15 @@ def posts_to_db(fb_dir):
     for update in updates:
         try:
             # Check whether the update is linked to a media file, if not, loop will continue
-            filepath = update["attachments"][0]["data"][0]["media"]["uri"]
-
+            cursor.execute("SELECT id FROM media where filepath=?",
+                           (update["attachments"][0]["data"][0]["media"]["uri"],))
+            filepath = cursor.fetchone()
+            if filepath[0] == None:
+                # Update is not linked to a media file
+                continue
+            if filepath[0][:18] != "photos_and_videos/":
+                # Don't inlude links to external files
+                continue
             # Get profile update metadata
             try:
                 unix_time = update["timestamp"]
@@ -350,7 +357,6 @@ def albums_to_db(fb_dir, db_name):
             # Read data from FB JSON file
             f = open(os.path.join(fb_dir + "/photos_and_videos/album/" + file))
             album = json.load(f)
-
             try:
                 unix_time = album["last_modified_timestamp"]
                 last_modified = datetime.fromtimestamp(

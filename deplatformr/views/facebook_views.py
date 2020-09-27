@@ -77,7 +77,7 @@ def facebook_upload():
                 cursor.execute("SELECT id from user_directories WHERE platform=? AND user_id=?", [
                                "facebook", current_user.id],)
                 directory_id = cursor.fetchone()
-                if directory_id is None:                
+                if directory_id is None:
                     cursor.execute(
                         "INSERT INTO user_directories (user_id, platform, directory) VALUES (?,?,?)", [current_user.id, "facebook", unzip_dir, ],)
                 else:
@@ -219,6 +219,9 @@ def facebook_memories():
                 # TODO: figure out how to activate post hyperlinks within the post text
                 # parsed_post, url_count = activate_hyperlinks(clean_post_names)
                 parsed_post, urls = cut_hyperlinks(clean_post_names)
+            else:
+                parsed_post = None
+                urls = None
 
             cursor.execute(
                 "SELECT * FROM media WHERE post_id = ?", (post[0],),)
