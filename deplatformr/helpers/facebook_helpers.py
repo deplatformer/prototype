@@ -461,6 +461,15 @@ def albums_to_db(fb_dir, db_name):
                                (filepath, album_id[0])],)
             db.commit()
 
+        # Count total number of photos for this album
+        cursor.execute(
+            "SELECT COUNT(id) FROM media WHERE album_id=?", (album_id[0],))
+        total_files = cursor.fetchone()
+
+        # Update album record with number of photos and cover_photo_id
+        cursor.execute("UPDATE albums SET total_files=? WHERE id=?", (total_files[0], album_id[0],))
+        db.commit()
+
     # Include the video directory
     if os.path.isdir(fb_dir + "/photos_and_videos/videos/"):
         cursor.execute("INSERT INTO albums (name) VALUES (?)", ("Videos",),)
@@ -498,5 +507,14 @@ def albums_to_db(fb_dir, db_name):
                                    ],
                                    )
                 db.commit()
+
+        # Count total number of videos in this album
+        cursor.execute(
+            "SELECT COUNT(id) FROM media WHERE album_id=?", (album_id[0],))
+        total_files = cursor.fetchone()
+
+        # Update album record with number of vidoes
+        cursor.execute("UPDATE albums SET total_files=? WHERE id=?", (total_files[0], album_id[0],))
+        db.commit()
 
     return()
