@@ -466,9 +466,14 @@ def albums_to_db(fb_dir, db_name):
             "SELECT COUNT(id) FROM media WHERE album_id=?", (album_id[0],))
         total_files = cursor.fetchone()
 
-        # Update album record with number of photos and cover_photo_id
-        cursor.execute("UPDATE albums SET total_files=? WHERE id=?",
-                       (total_files[0], album_id[0],))
+        # Use the first photo as a cover for the album
+        cursor.execute(
+            "SELECT id FROM media WHERE album_id=?", (album_id[0],))
+        cover_photo = cursor.fetchone()
+
+        # Update album record with number of photos and cover photo
+        cursor.execute("UPDATE albums SET total_files=?, cover_photo_id=? WHERE id=?",
+                       (total_files[0], cover_photo[0], album_id[0],))
         db.commit()
 
     # Include the video directory
@@ -526,7 +531,7 @@ def albums_to_db(fb_dir, db_name):
             "SELECT id FROM media WHERE album_id=?", (album_id[0],))
         cover_video = cursor.fetchone()
 
-        # Update album record with number of vidoes
+        # Update album record with number of videos and cover video
         cursor.execute("UPDATE albums SET total_files=?, cover_photo_id=? WHERE id=?",
                        (total_files[0], cover_video[0], album_id[0],))
         db.commit()
