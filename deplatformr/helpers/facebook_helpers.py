@@ -377,9 +377,13 @@ def albums_to_db(fb_dir, db_name):
 
             for photo in album["photos"]:
                 try:
-                    filepath = (photo["uri"])
+                    filepath = photo["uri"]
                 except:
-                    filepath = None
+                    # Photo does not exist
+                    continue
+                if filepath[:18] != "photos_and_videos/":
+                    # Don't inlude links to external images
+                    continue
                 try:
                     unix_time = photo["creation_timestamp"]
                     timestamp = datetime.fromtimestamp(
@@ -430,6 +434,12 @@ def albums_to_db(fb_dir, db_name):
             cursor.execute(
                 "SELECT COUNT(id) FROM media WHERE album_id=?", (album_id[0],))
             total_files = cursor.fetchone()
+            if (total_files[0] == None) or (total_files[0] == 0):
+                # Delete albums that have zero files
+                cursor.execute(
+                    "DELETE FROM albums WHERE id=?", (album_id[0],))
+                db.commit
+                continue
             # Get cover photo id for this album
             cursor.execute("SELECT id FROM media where filepath=?",
                            (album["cover_photo"]["uri"],))
@@ -497,7 +507,6 @@ def albums_to_db(fb_dir, db_name):
                 if filepath[:18] != "photos_and_videos/":
                     # Don't inlude links to external videos
                     continue
-                print(filepath)
                 try:
                     unix_time = video["creation_timestamp"]
                     timestamp = datetime.fromtimestamp(
