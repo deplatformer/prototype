@@ -272,15 +272,17 @@ def posts_to_db(fb_dir):
     for update in updates:
         try:
             # Check whether the update is linked to a media file, if not, loop will continue
-            cursor.execute("SELECT id FROM media where filepath=?",
-                           (update["attachments"][0]["data"][0]["media"]["uri"],))
-            filepath = cursor.fetchone()
-            if filepath[0] == None:
+            filepath = update["attachments"][0]["data"][0]["media"]["uri"]
+            cursor.execute("SELECT id, post_id, timestamp, description FROM media where filepath=?",(filepath,))
+            media_file = cursor.fetchone()
+            if media_file[0] == None:
                 # Update is not linked to a media file
                 continue
-            if filepath[0][:18] != "photos_and_videos/":
-                # Don't inlude links to external files
-                continue
+            if media_file[1] != None:
+                # Media file is already linked to a post, we need to create a new media file stub later
+                new_media = True
+            else:
+                new_media = False
             # Get profile update metadata
             try:
                 unix_time = update["timestamp"]
@@ -302,21 +304,17 @@ def posts_to_db(fb_dir):
             cursor.execute("SELECT last_insert_rowid()")
             post_id = cursor.fetchone()
 
-            # Get media_id using filepath
-            cursor.execute(
-                "SELECT id FROM media where filepath=?", (filepath,))
-            media_file = cursor.fetchone()
-
             try:
-                # Update media record with post_id
-                cursor.execute(
-                    "UPDATE media SET post_id=? WHERE id=?", (post_id[0], media_file[0],))
+                if new_media == False:
+                    # Update existing media record with post_id
+                    cursor.execute("UPDATE media SET post_id=? WHERE id=?", (post_id[0], media_file[0],))
+                else:
+                    # Create new media record to link post to. Don't duplicate the album link.
+                    cursor.execute("INSERT INTO media (timestamp, description, filepath, post_id) VALUES (?,?,?,?)", (media_file[2],media_file[3],filepath,post_id[0],))
                 db.commit()
-            except:
+            except Exception as e:
                 print("couldn't update media file with post id")
-                print(post_id)
-                print(filepath)
-                print(media_file)
+                print(e)
 
         except:
             # Profile update does not have a media file attached, so don't include it

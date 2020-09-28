@@ -199,11 +199,9 @@ def facebook_memories():
     # Check if demo data is being used
     if os.path.split(fb_dir)[1] == "facebook-deplatformr":
         # Prime for demo response
-        cursor.execute(
-            "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
+        cursor.execute("SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
     else:
-        cursor.execute(
-            "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
+        cursor.execute("SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
     posts = cursor.fetchall()
 
     media_posts = {}
@@ -237,16 +235,17 @@ def facebook_memories():
                     else:
                         file_parsed_post = None
                         file_urls = None
+                elif (post[2] is None) or (post[2] == ""):
+                    file_parsed_post = file[2]
+                    file_urls = None
                 else:
-                    if (post[2] is None) or (post[2] == ""):
-                        file_parsed_post = file[2]
-                        file_urls = None
+                    file_parsed_post = None
+                    file_urls = None
                 extension = os.path.splitext(file[7])
                 if extension[1] == ".mp4":
                     mimetype = "video"
                 else:
                     mimetype = "image"
-                filepath = file[7]
                 files.update({file[0]: {
                     "file_post": file_parsed_post,
                     "urls": file_urls,
