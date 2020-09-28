@@ -197,11 +197,13 @@ def facebook_memories():
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
     # Check if demo data is being used
-    if os.path.split(fb_dir)[1] == "facebook-deplatformr":
+    if os.path.split(fb_dir)[1][:20] == "facebook-deplatformr":
         # Prime for demo response
-        cursor.execute("SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
+        cursor.execute(
+            "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", ("08", "02"),)
     else:
-        cursor.execute("SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
+        cursor.execute(
+            "SELECT * FROM posts WHERE strftime('%m', timestamp) = ? AND strftime('%d', timestamp) = ? ORDER BY timestamp ASC", (month, day),)
     posts = cursor.fetchall()
 
     media_posts = {}
