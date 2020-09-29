@@ -93,4 +93,34 @@ def filecoin_download(cid):
 @ app.route('/filecoin-wallets')
 @ login_required
 def filecoin_wallets():
+
+    """
+    Retrieve all wallets from all FFSes and save them in a list for
+    presentation on the UI template
+    """
+
+    powergate = PowerGateClient(app.config["POWERGATE_ADDRESS"])
+
+    ffs = Ffs.query.filter_by(user_id=current_user.id).one()
+    wallets = []
+
+    addresses = powergate.ffs.addrs_list(ffs.token)
+
+    for address in addresses.addrs:
+        balance = powergate.wallet.balance(address.addr)
+        wallets.append(
+            {
+                "ffs": ffs.ffs_id,
+                "name": address.name,
+                "address": address.addr,
+                "type": address.type,
+                "balance": str(balance.balance),
+            }
+        )
+
+    return render_template("filecoin/filecoin-wallets.html", wallets=wallets, breadcrumb="Filecoin / Wallets")
+
+
+
+
     return render_template("filecoin/filecoin-wallets.html", breadcrumb="Filecoin / Wallets")

@@ -331,4 +331,6 @@ a.submenu {
     margin-top: 5px;
 }
 
-
+.page-item.active a.page-link {
+    color: #FFF !important;
+}
