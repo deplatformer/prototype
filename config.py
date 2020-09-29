@@ -2,10 +2,13 @@ import os
 
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
-UPLOADDIR = "_user_data/"
+USER_DATA_DIR = "_user_data/"
 
 # Flask settings
-SECRET_KEY = 'This is an INSECURE secret!! DO NOT use this in production!!'
+SECRET_KEY = '3d488586-35ec-4706-ab35-cb46e59f11b6'
+
+# Powergate address
+POWERGATE_ADDRESS = "127.0.0.1:5002"
 
 # Flask-SQLAlchemy settings
 # File-based SQL database
