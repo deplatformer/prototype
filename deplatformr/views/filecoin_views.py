@@ -94,9 +94,3 @@ def filecoin_download(cid):
 @ login_required
 def filecoin_wallets():
     return render_template("filecoin/filecoin-wallets.html", breadcrumb="Filecoin / Wallets")
-
-
-@ app.route('/filecoin-deals')
-@ login_required
-def filecoin_deals():
-    return render_template("filecoin/filecoin-deals.html", breadcrumb="Filecoin / Deals")
