@@ -7,7 +7,7 @@ app.config.from_object("config")
 db = SQLAlchemy(app)
 
 # These imports need to come after the app is instantiated
-from deplatformr.views import views, facebook_views
+from deplatformr.views import views, facebook_views, filecoin_views
 from deplatformr.models import user_models, filecoin_models
 
 # Setup Flask-User and specify the User data-model

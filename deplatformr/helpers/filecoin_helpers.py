@@ -40,7 +40,7 @@ def create_ffs():
     return new_ffs
 
 
-def push_to_filecoin(upload_path, file_name):
+def push_to_filecoin(upload_path, file_name, platform):
 
     # Push file to Filecoin via Powergate
     powergate = PowerGateClient(app.config["POWERGATE_ADDRESS"])
@@ -74,12 +74,13 @@ def push_to_filecoin(upload_path, file_name):
             upload_date=upload_date,
             file_size=file_size,
             CID=file_hash.cid,
+            platform=platform,
             user_id=current_user.id,
             ffs_id=ffs.id,
         )
         db.session.add(file_upload)
         db.session.commit()
-        print(file_name + " added.")
+        print(file_name + " added to Filecoin.")
 
     except Exception as e:
         # Output error message if pushing to Filecoin fails

@@ -36,15 +36,17 @@ class Files(db.Model):
     upload_date = db.Column(db.DateTime())
     file_size = db.Column(db.Integer())
     CID = db.Column(db.String(64), index=True)
+    platform = db.Column(db.String(255), index=True)
     user_id = db.Column(db.Integer(), db.ForeignKey(User.id), nullable=False)
     ffs_id = db.Column(db.Integer(), db.ForeignKey(Ffs.id), nullable=False)
 
-    def __init__(self, file_path, file_name, upload_date, file_size, CID, user_id, ffs_id):
+    def __init__(self, file_path, file_name, upload_date, file_size, CID, platform, user_id, ffs_id):
         self.file_path = file_path
         self.file_name = file_name
         self.upload_date = upload_date
         self.file_size = file_size
         self.CID = CID
+        self.platform = platform
         self.user_id = user_id
         self.ffs_id = ffs_id
 

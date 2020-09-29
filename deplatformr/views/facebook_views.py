@@ -30,8 +30,8 @@ def facebook_upload():
         # Get the filename from the request
         upload = request.files['uploadfile']
 
-        # Use the default upload directory configured for the app
-        upload_path = app.config["UPLOADDIR"]
+        # Use the user data directory configured for the app
+        upload_path = app.config["USER_DATA_DIR"]
         if not os.path.exists(upload_path):
             os.makedirs(upload_path)
 
@@ -120,7 +120,7 @@ def facebook_upload():
             for file in files:
                 if (file != ".DS_Store") and (file != "thumbs.db") and (file != "desktop.ini") and (file != ".zip"):
                     try:
-                        push_to_filecoin(path, file)
+                        push_to_filecoin(path, file, "facebook")
                     except Exception as e:
                         flash("Unable to store " + file +
                               " on Filecoin. " + str(e) + ".", "alert-danger")

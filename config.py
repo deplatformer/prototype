@@ -2,7 +2,7 @@ import os
 
 
 BASEDIR = os.path.abspath(os.path.dirname(__file__))
-UPLOADDIR = "_user_data/"
+USER_DATA_DIR = "_user_data/"
 
 # Flask settings
 SECRET_KEY = '3d488586-35ec-4706-ab35-cb46e59f11b6'

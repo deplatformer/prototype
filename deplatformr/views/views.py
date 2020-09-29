@@ -1,6 +1,6 @@
 import os
 import sqlite3
-from flask import Flask, render_template, render_template_string, redirect, send_from_directory
+from flask import Flask, render_template, send_from_directory
 from flask_user import login_required, current_user
 from deplatformr import app
 
@@ -45,24 +45,6 @@ def userfile(platform, file_id):
         directory[0] + "/" + split[0] + "/"
 
     return send_from_directory(fullpath, filename)
-
-
-@ app.route('/filecoin-files')
-@ login_required
-def filecoin_files():
-    return render_template("filecoin/filecoin-files.html", breadcrumb="Filecoin / Files")
-
-
-@ app.route('/filecoin-wallets')
-@ login_required
-def filecoin_wallets():
-    return render_template("filecoin/filecoin-wallets.html", breadcrumb="Filecoin / Wallets")
-
-
-@ app.route('/filecoin-deals')
-@ login_required
-def filecoin_deals():
-    return render_template("filecoin/filecoin-deals.html", breadcrumb="Filecoin / Deals")
 
 
 @ app.route('/instagram')
