@@ -47,19 +47,19 @@ def userfile(platform, file_id):
     return send_from_directory(fullpath, filename)
 
 
-@ app.route('/instagram')
-@ login_required
+@app.route('/instagram')
+@login_required
 def instagram():
     return render_template("instagram/instagram.html", breadcrumb="Instagram")
 
 
-@ app.route('/icloud')
-@ login_required
+@app.route('/icloud')
+@login_required
 def icloud():
     return render_template("icloud/icloud.html", breadcrumb="iCloud")
 
 
-@ app.route('/google')
-@ login_required
+@app.route('/google')
+@login_required
 def google():
     return render_template("google/google.html", breadcrumb="Google")
