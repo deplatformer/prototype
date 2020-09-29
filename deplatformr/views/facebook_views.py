@@ -8,6 +8,7 @@ from flask_user import login_required, current_user
 from deplatformr import app, db
 from deplatformr.helpers.helpers import unzip
 from deplatformr.helpers.facebook_helpers import posts_to_db, activate_hyperlinks, cut_hyperlinks, clean_nametags
+from deplatformr.helpers.filecoin_helpers import push_to_filecoin
 
 
 @app.route('/facebook-deplatform')
@@ -113,7 +114,18 @@ def facebook_upload():
 
         # TODO: ENCRYPT FILES
 
-        # TODO: Add uploaded and parsed Facebook files to Filecoin
+        # Add uploaded and parsed Facebook files to Filecoin
+        print("Uploading files to Filecoin")
+        for path, subdirectory, files in os.walk(unzip_dir):
+            for file in files:
+                if (file != ".DS_Store") and (file != "thumbs.db") and (file != "desktop.ini") and (file != ".zip"):
+                    try:
+                        push_to_filecoin(path, file)
+                    except Exception as e:
+                        flash("Unable to store " + file +
+                              " on Filecoin. " + str(e) + ".", "alert-danger")
+
+        # TODO: DELETE CACHED COPIES OF FILE UPLOADS
 
     return render_template("facebook/facebook-upload.html", upload=upload_success, breadcrumb="Facebook / Upload content")
 
