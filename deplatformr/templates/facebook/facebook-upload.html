@@ -50,5 +50,8 @@ $(".custom-file-input").on("change", function() {
     $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
   }
 });
+$("#upload-button").on("click", function(){
+  alert("The Deplatformr prototype isn't set up to run asynchronous background tasks with real time updates yet. Uploading your files to the Filecoin network will take a couple of minutes. Please don't close this tab. However, do feel free to close your eyes and relax...");
+});
 </script>
 {% endblock %}
