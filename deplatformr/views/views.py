@@ -28,7 +28,7 @@ def userfile(platform, file_id):
     try:
         platform_dir = directory[0]
         platform_db_name = os.path.basename(os.path.normpath(platform_dir))
-        platform_db = platform_dir + "/" + str(platform_db_name) + ".db"
+        platform_db = platform_dir + "/" + str(platform_db_name) + ".sqlite"
         id = int(file_id)
         db = sqlite3.connect(platform_db)
         cursor = db.cursor()
