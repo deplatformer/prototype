@@ -104,7 +104,7 @@ def filecoin_wallets():
         ffs = Ffs.query.filter_by(user_id=current_user.id).one()
     except:
         flash("No wallets created yet.", "alert-danger")
-        return render_template("filecoin/filecoinw-wallets.html", wallets=None, breadcrumb="Filecoin / Wallets")
+        return render_template("filecoin/filecoin-wallets.html", wallets=None, breadcrumb="Filecoin / Wallets")
 
     wallets = []
 
