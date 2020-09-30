@@ -113,7 +113,7 @@ def posts_to_db(fb_dir):
     # Get FB content directory name, use as database name & location
     db_name = os.path.basename(os.path.normpath(fb_dir))
     # Create database if it doesn't exist
-    db = sqlite3.connect(fb_dir + "/" + db_name + "sqlite")
+    db = sqlite3.connect(fb_dir + "/" + db_name + ".sqlite")
     cursor = db.cursor()
     # Create database structure if it doesn't exist
     cursor.execute(
@@ -344,7 +344,7 @@ def posts_to_db(fb_dir):
 
 def albums_to_db(fb_dir, db_name):
     # intiliaze database
-    db = sqlite3.connect(fb_dir + "/" + db_name + "sqlite")
+    db = sqlite3.connect(fb_dir + "/" + db_name + ".sqlite")
     cursor = db.cursor()
 
     # FB includes one JSON file per album

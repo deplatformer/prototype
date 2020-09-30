@@ -324,7 +324,7 @@ def facebook_album(album_id):
 
     fb_dir = directory[0]
     db_name = os.path.basename(os.path.normpath(fb_dir))
-    fb_db = fb_dir + "/" + str(db_name) + "sqlite"
+    fb_db = fb_dir + "/" + str(db_name) + ".sqlite"
 
     facebook_db = sqlite3.connect(fb_db)
     cursor = facebook_db.cursor()
