@@ -123,5 +123,3 @@ def filecoin_wallets():
         )
 
     return render_template("filecoin/filecoin-wallets.html", wallets=wallets, breadcrumb="Filecoin / Wallets")
-
-    return render_template("filecoin/filecoin-wallets.html", breadcrumb="Filecoin / Wallets")
