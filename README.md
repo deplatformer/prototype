@@ -1,4 +1,4 @@
-## Deplatformr prototype
+# Deplatformr prototype
 
 A prototype of the Deplatformr concept created as part of the [Gitcoin Apollo](https://gitcoin.co/hackathon/filecoin/) hackathon.
 
