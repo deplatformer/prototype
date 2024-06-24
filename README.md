@@ -2,7 +2,7 @@
 
 A prototype of the Deplatformr concept created as part of the [Gitcoin Apollo](https://gitcoin.co/hackathon/filecoin/) hackathon.
 
-Built with [Flask](https://palletsprojects.com/p/flask/) and [Pygate](https://pygate.tech).
+Built with [Flask](https://palletsprojects.com/p/flask/) and [Pygate](https://github.com/peterVG/pygate).
 
 For more information see:
 
